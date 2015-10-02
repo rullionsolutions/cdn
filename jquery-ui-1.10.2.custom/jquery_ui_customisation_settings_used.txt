@@ -1,0 +1,16 @@
+
+	jQuery UI Customisation Settings Used
+	
+	
+	Version			1.10.2
+	
+	UI Core			all
+	
+	Interactions	all
+	
+	Widgets			Datepicker
+	
+	Effects			all
+	
+	Theme			Smoothness
+
