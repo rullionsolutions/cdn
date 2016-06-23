@@ -1,0 +1,13 @@
+/*Contract specific stylesheet*/
+.underline {
+	text-decoration: underline;
+}
+.float-right {
+	float: right;
+}
+.float-left {
+	float: left;
+}
+.align-centre {
+	text-align: center;
+}
