@@ -1961,6 +1961,9 @@ $(document).on("initialize", function (event, target, opts) {
                 return item;
             }
         });
+        if ($(input_cntrl).is(":focus")) {
+            input_cntrl.typeahead().focus();
+        }
         input_cntrl.focus(function (event2) {
             input_value = input_cntrl.val();
         });
