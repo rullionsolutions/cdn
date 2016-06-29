@@ -2085,10 +2085,10 @@ $(document).on("initialize", function (event, target, opts) {
     //            config: [ 'img' ], // enable the plugin
     //            config: { ui: { reset: true, resize: false, crop: false, resizeable: false } }
     //        };
-            y.checkStyle( "/cdn/alohaeditor-0.25.2/aloha/css/aloha.css");
-    //      y.checkScript("/cdn/alohaeditor-0.25.2/aloha/lib/vendor/jquery-1.7.2.js");
-            y.checkScript("/cdn/alohaeditor-0.25.2/aloha/lib/require.js");
-            y.checkScript("/cdn/alohaeditor-0.25.2/aloha/lib/aloha-full.min.js");
+            y.checkStyle( "/cdn/alohaeditor-v0.25.2/aloha/css/aloha.css");
+    //      y.checkScript("/cdn/alohaeditor-v0.25.2/aloha/lib/vendor/jquery-1.7.2.js");
+            y.checkScript("/cdn/alohaeditor-v0.25.2/aloha/lib/require.js");
+            y.checkScript("/cdn/alohaeditor-v0.25.2/aloha/lib/aloha-full.min.js");
             y.aloha_activated = true;
         }
         Aloha.ready(function() {
