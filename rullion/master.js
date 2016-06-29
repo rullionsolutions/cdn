@@ -1751,7 +1751,7 @@ $(document).on("initialize", function (event, target, opts) {
         }
         $(this).find(":input").datepicker(dp_settings);
 
-        if (json_obj.input_mask) {
+        if (json_obj.input_mask && !$(this).hasClass("css_type_date")) {
             y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
             $(this).find(":input").mask(json_obj.input_mask);
         }
