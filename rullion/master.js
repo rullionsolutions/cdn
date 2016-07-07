@@ -1684,6 +1684,22 @@ y.fieldBlur = function (field) {
                 }
             } else {
                 if ($(field).attr("id") !== "nino_date_input") {
+                    //Validate date sibling
+                    if (json_obj.regex_date && !json_obj.regex_date_label) {
+                        json_obj.regex_date_label = "not valid";
+                    }
+                    if (json_obj.regex_date) {
+                        regex = new RegExp(json_obj.regex_date);
+                        [].some.call(siblings, function (sibling) {
+                            if (sibling.attr("id") === "nino_date_input" && regex.exec($(sibling).val())) {
+                                addError(json_obj.regex_date_label);
+                                return true;
+                            }
+                            return false;
+                        });
+                    }
+
+                    //Validate self
                     if (json_obj.regex_gender && !json_obj.regex_gender_label) {
                         json_obj.regex_gender_label = "not valid";
                     }
@@ -1692,6 +1708,17 @@ y.fieldBlur = function (field) {
                         valid = regex.exec(field_val);
                         if (!valid) {
                             addError(json_obj.regex_gender_label);
+                        }
+                    }
+                } else {
+                    if (json_obj.regex_date && !json_obj.regex_date_label) {
+                        json_obj.regex_date_label = "not valid";
+                    }
+                    if (json_obj.regex_date) {
+                        regex = new RegExp(json_obj.regex_date);
+                        valid = regex.exec(field_val);
+                        if (!valid) {
+                            addError(json_obj.regex_date_label);
                         }
                     }
                 }
@@ -1801,6 +1828,7 @@ $(document).on("initialize", function (event, target, opts) {
     target.find("div.css_edit.css_type_ni_number").each(function () {
         var field = $(this),
             json_obj = y.getRenderData(field),
+            nino_text_input = field.find("#nino_text_input"),
             nino_date_input = field.find("#nino_date_input"),
             //input2 = field.find(":input:eq(1)"),
             dp_settings;
@@ -1829,6 +1857,10 @@ $(document).on("initialize", function (event, target, opts) {
         if (json_obj.date_input_mask) {
             y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
             nino_date_input.mask(json_obj.date_input_mask);
+        }
+        if (json_obj.ni_input_mask) {
+            y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+            nino_text_input.mask(json_obj.ni_input_mask);
         }
         // if (json_obj.input_mask2) {
         //     y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
