@@ -1690,7 +1690,7 @@ y.fieldBlur = function (field) {
                     if (json_obj.regex_date) {
                         regex = new RegExp(json_obj.regex_date);
                         [].some.call(siblings, function (sibling) {
-                            if (sibling.attr("id") === "nino_date_input" && regex.exec($(sibling).val())) {
+                            if ($(sibling).attr("id") === "nino_date_input" && !regex.exec($(sibling).val())) {
                                 addError(json_obj.regex_date_label);
                                 return true;
                             }
