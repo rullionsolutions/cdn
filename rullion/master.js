@@ -158,18 +158,17 @@ y.load = function (target, params, opts) {
             return;
         }
         if ($(this).closest(".css_type_ni_number").length !== 0){
-
-            if ($(this).attr("type") === "checkbox" && $(this).attr("checked") !== "checked") {
+            if ($(this).attr("type") === "checkbox" && $(this).prop("checked") === false) {
                 $(this).val("off");
             }
 
             addParamIncludingBlank($(this).attr("name"), $(this).val());
             return;
         }
-        if ($(this).attr("type") === "checkbox" && $(this).attr("checked") !== "checked") {
+        if ($(this).attr("type") === "checkbox" && $(this).prop("checked") === false) {
             return;
         }
-        if ($(this).attr("type") === "radio"    && $(this).attr("checked") !== "checked") {
+        if ($(this).attr("type") === "radio"    && $(this).prop("checked") === false) {
             return;
         }
         addParam($(this).attr("name"), $(this).val());
@@ -1395,10 +1394,10 @@ $(document).on("click", ".css_cmd", function (event) {
                 if (!$(this).attr("name")) {
                     return;
                 }
-                if ($(this).attr("type") === "checkbox" && $(this).attr("checked") !== "checked") {
+                if ($(this).attr("type") === "checkbox" && $(this).prop("checked") === false) {
                     return;
                 }
-                if ($(this).attr("type") === "radio"    && $(this).attr("checked") !== "checked") {
+                if ($(this).attr("type") === "radio"    && $(this).prop("checked") === false) {
                     return;
                 }
                 addParam($(this).attr("name"), $(this).val());
@@ -1671,7 +1670,7 @@ y.fieldBlur = function (field) {
             }
         }
         if (container.hasClass("css_type_ni_number") && $(field).attr("id") !== "nino_unknown_input") {
-            if (container.find("#nino_unknown_input").attr("checked") === undefined){
+            if (container.find("#nino_unknown_input").prop("checked") === false){
                 if (json_obj.regex_ni && !json_obj.regex_ni_label) {
                     json_obj.regex_ni_label = "not valid";
                 }
