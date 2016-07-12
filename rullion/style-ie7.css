@@ -29,8 +29,8 @@ ul.qq-upload-list { margin-top: 5px; margin-left: 0px; }
 /* .qq-uploader 					{ position : static; top : 10px; left : 10px; } */
 .qq-upload-button				{ position : static !important; height: 20px; }
 .qq-upload-button >	span		{ padding-right : 10px; }
-.qq-upload-button >	input		{ position : static !important; font-size : 25px !important; width: 50px; 
+.qq-upload-button >	input		{ position : static !important; font-size : 25px !important; width: 50px;
 								  margin-left : -15px !important; margin-top : -32px !important; }
-#css_login .css_login_fld { *display: inline; zoom: 1; }
+
 /*Right align fields don't really work in IE7*/
 .css_right_align_numbers td.css_align_right input { text-align: left; }

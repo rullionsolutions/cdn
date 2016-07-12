@@ -48,8 +48,7 @@ li.css_menu_icon					{ padding: 3px 20px }
 
 div#css_top_bar > div#css_login		{ width: auto; min-width: 220px; max-width: 450px; display: block; margin-left: auto; margin-right: auto; }
 div#css_logout_button		{ margin-top: 2px; }
-#css_login .css_login_fld 	{ display: inline-block; }
-.css_login_fld label 		{ font-weight: bold; }
+
 #css_nav_icons				{ position: relative; text-align: right; }
 
 #css_left_bar > .css_page_links	> a	{ text-align: right; padding-right: 10px; }
@@ -70,6 +69,16 @@ footer > div > div			{ padding: 5px; }
 footer > div > div#css_footer_copyright		{ text-align: left;   padding-left: 20px; }
 footer > div > div#css_privacy_msg			{ text-align: center; }
 footer > div > div#css_footer_datetime		{ text-align: right;  padding-right: 20px; }
+
+
+div.modal.fade.in			{ top: 50px; }						/* Modal window disappears on narrow screens */
+.modal-footer				{ line-height: 35px; }				/* space between rows of buttons if they wrap around */
+.modal-sm					{ width: 300px; }
+.modal-lg					{ width: 760px; }
+@media (min-width: 768px) {
+	.modal-sm				{ margin-left: -150px; }
+	.modal-lg				{ margin-left: -380px; }
+}
 
 
 

@@ -702,6 +702,3 @@ x.field.richtext.activateEditable = function () {
 x.field.richtext.getValue = function () {
     return $(this.input_elmt).html();
 };
-
-//To show up in Chrome debugger...
-//@ sourceURL=rullion/field.js
