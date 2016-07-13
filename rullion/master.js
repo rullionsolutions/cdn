@@ -726,6 +726,9 @@ y.getRedirectURL = function (data_back, query_string) {
     if (query_string.indexOf(".html") > -1) {
         return query_string;
     }
+    if (query_string.indexOf("mailto") === 0) {
+        return query_string;
+    }
     if (query_string && query_string.indexOf("?") !== 0) {
         query_string = "?" + query_string;
     }
