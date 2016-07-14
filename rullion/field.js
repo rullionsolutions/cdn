@@ -341,7 +341,7 @@ x.field.autocompleter.activateEditable = function () {
 
 x.field.autocompleter.source = function (query, process) {
     var that = this;
-    $.ajax({ dataType: "json", url: "dyn/", data: { mode: "autocompleter", q: query, field: this.control_id },
+    $.ajax({ dataType: "json", url: "jsp/main.jsp", data: { mode: "autocompleter", q: query, field: this.control_id },
         beforeSend: function (xhr) {        // IOS6 fix
             xhr.setRequestHeader('If-Modified-Since', '');
         },
@@ -545,7 +545,7 @@ x.field.file.activateEditable = function () {
 
     new qq.FileUploader({
         element: $(this.elem).find("div.css_file_replace_target")[0],
-        action: "dyn/?mode=fileup&field_control=" + this.control_id,
+        action: "jsp/main.jsp?mode=fileup&field_control=" + this.control_id,
         allowedExtensions: this.server_data.allowed_extensions.split(","),
         onSubmit  : function (id, file_name) { that.uploadSubmitted(); },
         onCancel  : function (id, file_name) { that.uploadCancelled(); },
@@ -558,7 +558,7 @@ x.field.file.activateEditable = function () {
     if (this.file_title) {
         $(this.elem).find("ul.qq-upload-list").append(
             "<li class='qq-upload-success'><span class='qq-upload-file'>" +
-            "<a target='_blank' href='dyn/" + this.file_title + "?mode=filedown&id=" +
+            "<a target='_blank' href='jsp/main.jsp" + this.file_title + "?mode=filedown&id=" +
             this.file_id + "'>" + this.file_title + "</a></span></li>");
     //      "<a href='javascript:y.remoteModal(\"jsp/main.jsp?mode=context&page_id=ac_file_context&page_key=" +
     //      existing_id + "\")'>" + existing_title + "</a></span></li>");

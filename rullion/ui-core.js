@@ -372,7 +372,7 @@ x.ui.redirect = function (url, reload_opts) {
     reload_opts = reload_opts || {};
     this.processReloadOpts(reload_opts, url_parts);
 //    this.debug("redirect(" + url + "), changing_simple_url: " + changing_simple_url);
-    if (url_parts.skin === "modal") {
+    if (url_parts.skin === "modal" || url_parts.skin === "context.html") {
         reload_opts.closeable = true;
         x.ui.modal.load(url_parts.query, reload_opts);
     } else if (reload_opts.open_new_window) {
@@ -473,12 +473,17 @@ x.ui.performAjaxPostSuccess = function (data_back, params, reload_opts) {
     } else if (this.session.is_guest && this.session.user_id !== this.default_guest) {
         this.logout();         // invalidates current session then redirects
 
-    } else if (this.page.skin && this.page.skin !== this.skin) {
+    } else if (this.page.redirect_url || (this.page.skin && this.page.skin !== this.skin)) {
+        if (this.page.redirect_new_window) {
+            reload_opts.open_new_window = true;
+        }
+        this.debug("redirecting, redirect: " + this.page.redirect_url + ", page.skin: " + this.page.skin + ", this.skin: " + this.skin);
         this.redirect(this.page.redirect_url, reload_opts);        // TODO close if modal?
 
     } else {
         this.setTitle(this.page.title);
         this.setDescription(this.page.description);
+        this.setNavLinks(this.page.entity_search_page, this.page.nav_prev_key, this.page.nav_next_key);
         this.setTabs(this.page.tabs);
         this.setLinks(this.page.links);
         this.setMessages(this.session.messages);
@@ -557,7 +562,8 @@ x.ui.deactivate = function () {
 
 x.ui.collectControlParams = function (target_selector) {
     "use strict";
-    var params = { challenge_token: this.challenge_token };
+    var params = {};
+    params.challenge_token = (this.page && this.page.challenge_token);
     $(target_selector).find(".css_edit").each(function () {
         var field = x.field.getFieldObject(this);
         params[field.control_id] = field.getValue();
@@ -701,16 +707,22 @@ x.ui.main.setNavLinks = function (search_page, prev_key, next_key) {
         $("#css_nav_search")
             .removeClass("css_hide")
             .attr("href", "?page_id=" + search_page);
+    } else {
+        $("#css_nav_search").addClass("css_hide");
     }
     if (prev_key) {
         $("#css_nav_prev")
             .removeClass("css_hide")
             .attr("href", "?page_id=" + this.page_id + "&page_key=" + prev_key);
+    } else {
+        $("#css_nav_prev").addClass("css_hide");
     }
     if (next_key) {
         $("#css_nav_next")
             .removeClass("css_hide")
             .attr("href", "?page_id=" + this.page_id + "&page_key=" + next_key);
+    } else {
+        $("#css_nav_next").addClass("css_hide");
     }
 };
 

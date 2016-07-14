@@ -43,7 +43,7 @@ x.ui.promptLogin = function (/*params*/) {
                 that.setTitle("Log-in");
                 that.setLoadContent(data);
                 that.setButtons(
-                    "<button id='login' class='btn btn-primary' onclick='x.ui.modal.login()'>Log-in</button>" +
+                    "<button id='login' class='btn btn-primary css_button_main' onclick='x.ui.modal.login()'>Log-in</button>" +
                     "<a class='btn' href='guest.html?page_id=ac_pswd_forgotten'>Forgotten Password</a>" +
                     "<a class='btn' href='guest.html?page_id=ac_user_request_choose'>Request a User Account</a>");
                 that.open(false);         // not closeable
@@ -206,7 +206,7 @@ x.ui.main.pingInternal = function () {
         success: function (data_back) {
             if (that.ping_failures > 0) {
                 that.clearMessages();
-                that.addMessage("And we're back!", 'I');
+                that.reportMessage({ type: 'I', text: "And we're back!" });
             }
             that.ping_failures = 0;
             if (typeof data_back === "string" || data_back.logged_out) {
@@ -221,9 +221,9 @@ x.ui.main.pingInternal = function () {
             if (text_status === "parsererror") {            // logged out, so response is log-in page
                 window.location = that.skin;
             } else if (that.ping_failures < 20) {
-                that.addMessage("Server gone away, retrying...", 'W');
+                that.reportMessage({ type: 'W', text: "Server gone away, retrying..." });
             } else {
-                that.addMessage("Server gone for good. Giving up. Please try later", 'E');
+                that.reportMessage({ type: 'E', text: "Server gone for good. Giving up. Please try later" });
             }
         }
     });
@@ -456,6 +456,10 @@ x.ui.listColumnChooser = function (span) {
     "use strict";
     $(span).parent().children("div.css_list_choose_cols").toggleClass("css_hide");
 };
+
+// temp fix due to reference embedded in sapphire....
+var y = { listColumnChooser: x.ui.main.listColumnChooser };
+
 
 x.ui.filterColumnButtons = function (button_container, filter_text) {
     "use strict";
