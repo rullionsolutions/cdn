@@ -201,16 +201,6 @@ div.css_test				{ background-image: url(../icons/test-env-bg.png); background-re
 
 
 
-div.css_page_links			{ margin-top: 10px; }
-div.css_messages			{ margin-top: 10px; height: 60%; }
-div.css_messages > div.alert	{ padding: 8px; overflow-wrap: break-word; }
-.messages					{ margin-top: 10px; }
-
-/* Buttons at bottom */
-div.css_page_buttons		{ clear: both; margin-bottom: 20px; }
-div.css_page_buttons > button	{ margin-right: 10px; }
-
-
 /*Scroll Pane Sections*/
 .css_scroll					{ overflow-x: auto; overflow-y: visible; }
 .jspDrag					{ background-color: #3E0543; }

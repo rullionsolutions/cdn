@@ -8,9 +8,6 @@ h4							{ font-size: 11pt; }
 p							{ line-height: 13pt; }
 p.lead						{ font-size: 11pt; }
 
-#css_body					{ margin-bottom: 50px; }
-.css_body_tabs_above		{ border-width: 0px 1px 1px 1px; border-style: solid; border-color: #DDDDDD; padding: 20px; }
-
 div#css_opt_navbar > div.navbar-inner	{
 								padding: 10px 20px 0 20px; border: 0; filter: none; /* override MSIE setting in TB */
 								box-shadow: none; background-image: none; border-bottom: 1px solid #E3E3E3; }
@@ -49,20 +46,46 @@ li.css_menu_icon					{ padding: 3px 20px }
 div#css_top_bar > div#css_login		{ width: auto; min-width: 220px; max-width: 450px; display: block; margin-left: auto; margin-right: auto; }
 div#css_logout_button		{ margin-top: 2px; }
 
-#css_nav_icons				{ position: relative; text-align: right; }
 
-#css_left_bar > .css_page_links	> a	{ text-align: right; padding-right: 10px; }
 
-div.css_main_logo			{
-								border-radius: 10px; text-align: center; padding: 10px; margin-bottom: 20px;
-								min-width: 130px; /*box-shadow: 0 3px 5px #B0B0B0;*/
-								behavior: url(../PIE-1.0.0/PIE.htc);
-							}
-div.css_main_logo > a		{ display: inline-block; height: 60px; width: 130px; overflow: hidden; margin-left: 0px; }
+
+
+
+/* Left Bar */
+
+div.css_main_logo			{ border-radius: 10px; text-align: center; margin-bottom: 20px; behavior: url(../PIE-1.0.0/PIE.htc); }
+div.css_main_logo > a		{ display: inline-block; }
+
+div.css_page_links			{ margin-top: 10px; }
+@media (min-width: 768px) {
+	.css_page_links	> *		{ text-align: right; display: block; }
+}
+@media (max-width: 767px) {
+	.css_page_links	> *		{ margin-right: 10px; }
+}
+
+div.css_messages			{ margin-top: 10px; height: 60%; }
+div.css_messages > div.alert	{ padding: 8px; overflow-wrap: break-word; }
+/*.messages					{ margin-top: 10px; }*/
+
+
+/* Title Bar */
 
 #css_page_header_title > b	{ vertical-align: middle; }
+#css_nav_icons				{ position: relative; text-align: right; }
+#css_body					{ margin-bottom: 50px; }
+.css_body_tabs_above		{ border-width: 0px 1px 1px 1px; border-style: solid; border-color: #DDDDDD; padding: 20px; }
+
+
+/* Buttons at bottom */
+
+div.css_page_buttons		{ clear: both; margin-bottom: 20px; }
+div.css_page_buttons > button	{ margin-right: 10px; }
+
+
 
 /* Footer */
+
 footer						{ position: fixed; bottom: 0; width: 100%; margin: 0; font-size: 8pt; font-weight: bold; border-top: 1px solid #E3E3E3; }
 footer > div				{ display: inline-block; width: 33%; }
 footer > div > div			{ padding: 5px; }
@@ -70,6 +93,8 @@ footer > div > div#css_footer_copyright		{ text-align: left;   padding-left: 20p
 footer > div > div#css_privacy_msg			{ text-align: center; }
 footer > div > div#css_footer_datetime		{ text-align: right;  padding-right: 20px; }
 
+
+/* Modal */
 
 div.modal.fade.in			{ top: 50px; }						/* Modal window disappears on narrow screens */
 .modal-footer				{ line-height: 35px; }				/* space between rows of buttons if they wrap around */
