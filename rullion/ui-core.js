@@ -27,6 +27,8 @@ x.ui.bindToHTML = function (skin, default_page, selectors) {
     this.default_page = default_page;
     this.selectors    = selectors;
     this.checkSelector("target");
+    this.checkSelector("title");
+    this.checkSelector("descr");
     this.checkSelector("content");
     this.checkSelector("messages");
     this.checkSelector("links");
@@ -58,14 +60,22 @@ x.ui.setURL = function (/*url*/) {
     this.debug("ignoring setURL()");
 };
 
-x.ui.setTitle = function (/*title*/) {
+x.ui.setTitle = function (title) {
     "use strict";
-    this.debug("ignoring setTitle()");
+    $(this.selectors.title).html(title);
+    document.title = title;
 };
 
-x.ui.setDescription = function (/*descr*/) {
+x.ui.setDescription = function (descr) {
     "use strict";
-    this.debug("ignoring setDescription()");
+    if (this.selectors.descr) {
+        if (descr) {
+            $(this.selectors.descr).text(descr);
+            $(this.selectors.descr).removeClass("css_hide");
+        } else {
+            $(this.selectors.descr).   addClass("css_hide");
+        }
+    }
 };
 
 x.ui.setContent = function (data) {
@@ -470,7 +480,7 @@ x.ui.performAjaxPostSuccess = function (data_back, params, reload_opts) {
             x.ui.modal.promptLogin(params);
         }
 
-    } else if (this.session.is_guest && this.session.user_id !== this.default_guest) {
+    } else if (this.session.is_guest && this.session.user_id !== this.default_guest_id) {
         this.logout();         // invalidates current session then redirects
 
     } else if (this.page.redirect_url || (this.page.skin && this.page.skin !== this.skin)) {
@@ -614,9 +624,15 @@ x.ui.main = x.ui.clone("x.ui.main");
 x.ui.main.bindToHTML = function (skin, default_page, selectors) {
     "use strict";
     x.ui.bindToHTML.call(this, skin, default_page, selectors);
-    this.unisrch(this.selectors.unisrch);
-    this.updateDate(this.selectors.datetime);
-    this.setCopyrightMsg(this.selectors.copyright);
+    if (this.selectors.unisrch) {
+        this.unisrch(this.selectors.unisrch);
+    }
+    if (this.selectors.datetime) {
+        this.updateDate(this.selectors.datetime);
+    }
+    if (this.selectors.copyright) {
+        this.setCopyrightMsg(this.selectors.copyright);
+    }
 };
 
 x.ui.main.setURL = function (url) {
@@ -632,22 +648,6 @@ x.ui.main.setURL = function (url) {
     $("a#css_page_pdf")
         .removeClass("css_hide")
         .attr("href", "jsp/main.jsp?reload_opt_open_new_window=true&mode=renderPDF&"   + url);
-};
-
-x.ui.main.setTitle = function (title) {
-    "use strict";
-    $("#css_page_header_title").html(title);
-    document.title = title;
-};
-
-x.ui.main.setDescription = function (descr) {
-    "use strict";
-    if (descr) {
-        $("#css_page_header_descr").text(descr);
-        $("#css_page_header_descr").removeClass("css_hide");
-    } else {
-        $("#css_page_header_descr").   addClass("css_hide");
-    }
 };
 
 x.ui.main.setTabs = function (tabs) {
@@ -735,12 +735,6 @@ x.ui.main.getScrollElement = function () {
 
 //--------------------------------------------------------- x.ui.modal ---------------------------------------------------------
 x.ui.modal = x.ui.clone("x.ui.modal");
-
-
-x.ui.modal.setTitle = function (title) {
-    "use strict";
-    $("#css_modal #css_modal_title").html(title);
-};
 
 
 x.ui.modal.open = function (closeable) {

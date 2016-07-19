@@ -56,7 +56,7 @@ div#css_logout_button		{ margin-top: 2px; }
 div.css_main_logo			{ border-radius: 10px; text-align: center; margin-bottom: 20px; behavior: url(../PIE-1.0.0/PIE.htc); }
 div.css_main_logo > a		{ display: inline-block; }
 
-div.css_page_links			{ margin-top: 10px; }
+.css_page_links > *		{ margin: 10px 0 0 0; }
 @media (min-width: 768px) {
 	.css_page_links	> *		{ text-align: right; display: block; }
 }

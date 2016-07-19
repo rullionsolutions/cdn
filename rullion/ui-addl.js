@@ -28,9 +28,12 @@ x.ui.guestLogin = function (guest_id, params, reload_opts) {
 };
 
 
-x.ui.promptLogin = function (/*params*/) {
+x.ui.promptLogin = function (params) {
     "use strict";
     var that = this;
+    if (params.chameleon_login) {
+        this.chameleon_login = true;
+    }
     $.ajax({ url: "jsp/login.jsp", type: "GET", cache: false,
         beforeSend: function (xhr) {        // IOS6 fix
             xhr.setRequestHeader('If-Modified-Since', '');
@@ -39,15 +42,18 @@ x.ui.promptLogin = function (/*params*/) {
             if (typeof data === "object" && data.action === "normal_login") {           //
                 x.ui.main.redirect(window.location.search, { force_load: true });          // force full page load
             } else {
-                x.ui.main.setTitle("Log-in");
+                // x.ui.main.setTitle("Log-in");
                 that.setTitle("Log-in");
                 that.setLoadContent(data);
                 that.setButtons(
                     "<button id='login' class='btn btn-primary css_button_main' onclick='x.ui.modal.login()'>Log-in</button>" +
                     "<a class='btn' href='guest.html?page_id=ac_pswd_forgotten'>Forgotten Password</a>" +
                     "<a class='btn' href='guest.html?page_id=ac_user_request_choose'>Request a User Account</a>");
+                if (that.chameleon_login) {
+                    $(that.selectors.content).find("#mimic_user_id").removeClass("css_hide");
+                }
                 that.open(false);         // not closeable
-                // that.setSize("sm");
+                that.setSize("md");
                 that.activate();
             }
         },
@@ -80,7 +86,7 @@ x.ui.login = function () {
 
 x.ui.getLoginParameters = function () {
     "use strict";
-    var params = this.collectControlParams($(this.selectors.content));
+    var params = this.collectControlParams($(this.selectors.target));
 
     if (!params.j_username || !params.j_password) {
         this.clearMessages();
@@ -137,7 +143,7 @@ x.ui.loginPhaseThree = function (params /*, data*/) {
 
 x.ui.loginPhaseFour = function (params, data) {
     "use strict";
-    if (typeof data === "object" && data.action === "normal_login") {
+    if (typeof data === "object" && (data.action === "normal_login" || data.action === "chameleon_login")) {
         x.ui.main.redirect(this.post_login_url, { force_load: true });          // force full page load
     } else {
         // what circumstances bring us here?
