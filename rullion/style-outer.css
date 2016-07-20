@@ -56,16 +56,16 @@ div#css_logout_button		{ margin-top: 2px; }
 div.css_main_logo			{ border-radius: 10px; text-align: center; margin-bottom: 20px; behavior: url(../PIE-1.0.0/PIE.htc); }
 div.css_main_logo > a		{ display: inline-block; }
 
-.css_page_links > *		{ margin: 10px 0 0 0; }
+#css_page_links > *			{ margin-top: 5px; }
 @media (min-width: 768px) {
-	.css_page_links	> *		{ text-align: right; display: block; }
+	#css_page_links	> *		{ display: block; text-align: right; }
 }
 @media (max-width: 767px) {
-	.css_page_links	> *		{ margin-right: 10px; }
+	#css_page_links	> *		{ margin-right: 5px; }
 }
 
-div.css_messages			{ margin-top: 10px; height: 60%; }
-div.css_messages > div.alert	{ padding: 8px; overflow-wrap: break-word; }
+#css_messages				{ margin-top: 10px; height: 60%; }
+#css_messages > div.alert	{ padding: 8px; overflow-wrap: break-word; }
 /*.messages					{ margin-top: 10px; }*/
 
 

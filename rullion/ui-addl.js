@@ -219,6 +219,9 @@ x.ui.main.pingInternal = function () {
                 window.location = that.skin;
             } else if (data_back.logout) {
                 that.logout();
+            } else if (data_back.prompt) {
+                alert("Your session is due to log out within one minute, click OK to contine");
+                that.reload({});
             }
         },
         error: function (ignore /*xml_http_request*/, text_status) {
