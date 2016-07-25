@@ -1862,7 +1862,7 @@ $(document).on("initialize", function (event, target, opts) {
         }
         if (json_obj.ni_input_mask) {
             y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
-            nino_text_input.mask(json_obj.ni_input_mask);
+            nino_text_input.mask(json_obj.ni_input_mask, {autoclear: false});
         }
         // if (json_obj.input_mask2) {
         //     y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
