@@ -43,7 +43,7 @@ function setupDate(field) {
     //$(field).datepicker(dp_settings);
 
     if (json_obj.input_mask) {
-        y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+        y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
         $(field).find(":input").mask(json_obj.input_mask);
     }
 }
@@ -69,7 +69,7 @@ $("#quick_search").each(function(item){
             setupDate($(this));
         } else if (json_obj.input_mask) {
             console.log("setting up date field");
-            y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             $(this).find(":input").mask(json_obj.input_mask);
         }
     });
