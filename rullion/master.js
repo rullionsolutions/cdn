@@ -1512,7 +1512,7 @@ $(document).on("initialize", function (e, target, opts) {
             }
         }
         if (json_obj.input_mask && !$(this).hasClass("css_type_date")) {
-            y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             $(this).find(":input").mask(json_obj.input_mask);
         }
     });
@@ -1781,7 +1781,7 @@ $(document).on("initialize", function (event, target, opts) {
         $(this).find(":input").datepicker(dp_settings);
 
         if (json_obj.input_mask && !$(this).hasClass("css_type_date")) {
-            y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             $(this).find(":input").mask(json_obj.input_mask);
         }
     });
@@ -1815,11 +1815,11 @@ $(document).on("initialize", function (event, target, opts) {
         input1.datepicker(dp_settings);
         // An array would be better
         if (json_obj.input_mask1) {
-            y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             input1.mask(json_obj.input_mask1);
         }
         if (json_obj.input_mask2) {
-            y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             input2.mask(json_obj.input_mask2);
         }
     });
@@ -1857,15 +1857,15 @@ $(document).on("initialize", function (event, target, opts) {
         nino_date_input.datepicker(dp_settings);
         // // An array would be better
         if (json_obj.date_input_mask) {
-            y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             nino_date_input.mask(json_obj.date_input_mask);
         }
         if (json_obj.ni_input_mask) {
-            y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
-            nino_text_input.mask(json_obj.ni_input_mask);
+            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
+            nino_text_input.mask(json_obj.ni_input_mask, {autoclear: false});
         }
         // if (json_obj.input_mask2) {
-        //     y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+        //     y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
         //     input2.mask(json_obj.input_mask2);
         // }
     });

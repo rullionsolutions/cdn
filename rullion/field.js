@@ -137,7 +137,7 @@ x.field.activateEditable   = function () {
         $(this.elem).children("div.controls").append("<span class='help-block css_client_messages' />");
     }
     if (this.server_data.input_mask) {
-        x.ui.main.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+        x.ui.main.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
         $(this.elem).find(":input:eq(0)").mask(this.server_data.input_mask);
     }
 
@@ -462,7 +462,7 @@ x.field.datetime.max_parts_expected = 2;
 x.field.datetime.activateEditable = function () {
     x.field.date.activateEditable.call(this);
     if (this.server_data.input_mask2) {
-        x.ui.main.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+        x.ui.main.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
         $(this.elem).find(":input:eq(1)").mask(this.server_data.input_mask2);
     }
 };
