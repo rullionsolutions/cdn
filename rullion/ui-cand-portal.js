@@ -178,6 +178,7 @@ $("#css_login_toggle_left").click(function () {
     $("#css_login_block_top").toggle();
 });
 
+/**
 y.login = function (clicked_elem) {
     var div_elem,
         username,
@@ -265,3 +266,4 @@ y.login = function (clicked_elem) {
         }
     });
 };
+*/

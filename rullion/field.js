@@ -30,6 +30,9 @@ x.field = {
 
 x.field.clone = function (id) {
     var obj = Object.create(this);
+    if (!id || typeof id !== "string") {
+        throw new Error("invalid id on clone()");
+    }
     obj.id  = id;
     return obj;
 };
@@ -41,7 +44,7 @@ x.field.debug = function (msg) {
 
 
 x.field.instantiate = function (elem) {
-    var obj = Object.create(this);
+    var obj  = Object.create(this);
     obj.elem = elem;
     obj.ui   = x.ui.getLocal(elem);
     obj.control_id = $(elem).attr("id");
@@ -109,6 +112,12 @@ x.field.getFieldObject = function (elem) {
         $(elem).data("field_object", field_object);
         json_str = $(elem).find(".css_render_data").text();
         field_object.server_data = json_str ? $.parseJSON(json_str) : {};
+        if (field_object.server_data.min_parts_expected) {
+            field_object.min_parts_expected = field_object.server_data.min_parts_expected;
+        }
+        if (field_object.server_data.max_parts_expected) {
+            field_object.max_parts_expected = field_object.server_data.max_parts_expected;
+        }
     }
     return field_object;
 };
@@ -264,10 +273,11 @@ x.field.getValue = function () {
             return;
         }
         part_val = $(this).val();
-        if (part_val) {
+        // MUST put a pipe delimiter between EVERY input in the field, to ensure correct interpretation by the server
+        // if (part_val) {
             val += delim + part_val;
             delim = "|";
-        }
+        // }
     });
 
     if (typeof this.min_parts_expected === "number" && parts < this.min_parts_expected) {
