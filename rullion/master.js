@@ -1418,7 +1418,7 @@ $(document).on("keyup", function (event) {
         button;
     y.last_key_pressed = event.keyCode;
     if ((event.keyCode === 13) && node && ($(node).attr("type") === "text" || $(node).attr("type") === "password"))  {
-        button = $(this).parents("form").find(".css_button_main");
+        button = $(node).closest(".css_section").find(".css_button_main");
         if (button.length === 0) {
             button = $(".css_button_main");
         }
