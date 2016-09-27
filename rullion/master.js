@@ -1642,6 +1642,7 @@ y.fieldBlur = function (field) {
         }
 
         if (container.hasClass("css_type_number")) {
+            field_val = field_val.replace(/,/g, "");
             valid = !isNaN(field_val);
             number = parseFloat(field_val, 10);
             if (!valid) {
