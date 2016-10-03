@@ -646,11 +646,14 @@ y.logout = function () {
 
 /*------------------------------------------------------------Ping--------------------------------------------------------------*/
 y.ping = function () {
+    var url_params;
+    var modal_allowed;
+    var modalOptions;
     setTimeout(y.ping, y.ping_interval);
     if (!y.logged_in || !y.session || !y.session.ping_mechanism) {
         return;
     }
-    var url_params = "&visit_id=" + y.session.id + "." + y.session.visits;
+    url_params = "&visit_id=" + y.session.id + "." + y.session.visits;
     if (y.page_active && y.time_stamps. pre_render && y.time_stamps.pre_post) {
         url_params +=   "&post_interval=" + (y.time_stamps. pre_render.getTime() - y.time_stamps.pre_post  .getTime());
     }
@@ -672,6 +675,16 @@ y.ping = function () {
                 window.location = y.skin;
             } else if (data_back.logout) {
                 y.logout();
+            } else if (data_back.session_extend_prompt) {
+                modal_allowed = $("#css_modal > .modal-messages").length && !$("#css_modal .modal-body").hasClass("css_load_target");
+                modalOptions = {
+                    modal_allowed: modal_allowed,
+                    modal_confirm_btn: "extend",
+                    modal_confirm_text: "Extend",
+                    modal_close: false,
+                };
+                y.addModalMessage("Your session will soon timeout. Please click here to extend your session.", "W");
+                y.showModalAlert(modalOptions);
             }
         },
         error: function (xml_http_request, text_status) {
@@ -1247,7 +1260,8 @@ y.reportMessagesFromServer = function (messages) {
         modal_text = {},
         modal_allowed,
         modal_confirm_btn = false,
-        modal_dialog = false;
+        modal_dialog = false,
+        modalOptions;
 
     if (!messages || messages.length === 0) {
         return;
@@ -1291,7 +1305,12 @@ y.reportMessagesFromServer = function (messages) {
     if (modal_dialog) {
         modal_confirm_btn = null;
     }
-    y.showModalAlert(modal_allowed, modal_confirm_btn);
+    modalOptions = {
+        modal_allowed: modal_allowed,
+        modal_confirm_btn: modal_confirm_btn,
+        modal_close: modal_confirm_btn,
+    };
+    y.showModalAlert(modalOptions);
 };
 
 y.addModalMessage = function (msg_text, msg_type) {
@@ -1318,24 +1337,36 @@ y.clearModalMessages = function () {
     $("#css_modal > .modal-messages").empty();
 };
 
-y.showModalAlert = function (modal_allowed, modal_confirm_btn) {
+y.showModalAlert = function (params) {
   //If modal messages are present then show the modal window
-    if ($("#css_modal > .modal-messages").children().length > 0 && modal_allowed) {
+    var modalOptions = {
+        backdrop: "static",
+        keyboard: "false",
+    };
+    var defaultCloseText = ((params.modal_confirm || params.modal_confirm_btn) ? "No" : "OK");
+    var modal_confirm_text = params.modal_confirm_text || "Yes";
+    var modal_close_text = params.modal_close_text || defaultCloseText;
+    var modal_confirm_attr;
+    var modal_close_attr;
+
+    if ($("#css_modal > .modal-messages").children().length > 0 && params.modal_allowed) {
         $("#css_modal .modal-header > .close").addClass("hide");
         $("#css_modal .modal-body").empty();
         $("#css_modal .modal-body").addClass("hide");
         $("#css_modal #css_modal_label").text("");
-        $("#css_modal .modal-footer"     ).empty();
+        $("#css_modal .modal-footer").empty();
 
-        if (modal_confirm_btn) {
-            $("#css_modal .modal-footer").append('<a class="btn btn-large modal-message-save" modal_confirm_btn="'+modal_confirm_btn+'">Yes</a>');
-            $("#css_modal .modal-footer").append('<a class="btn btn-large modal-message-close">No</a>');
-        } else {
-            $("#css_modal .modal-footer").append('<a class="btn btn-large modal-message-close">OK</a>');
+        if (params.modal_confirm || params.modal_confirm_btn) {
+            modal_confirm_attr = (params.modal_confirm_btn ? "modal_confirm_btn='" + params.modal_confirm_btn + "'" : "");
+            $("#css_modal .modal-footer").append("<a class='btn btn-large modal-message-confirm' " + modal_confirm_attr + ">" + modal_confirm_text + "</a>");
+        }
+        if (params.modal_close || params.modal_close_btn) {
+            modal_close_attr = (params.modal_close_btn ? "modal_close_btn='" + params.modal_close_btn + "'" : "");
+            $("#css_modal .modal-footer").append("<a class='btn btn-large modal-message-close' " + modal_close_attr + ">" + modal_close_text + "</a>");
         }
 
-        $("#css_modal .modal-footer").css("text-align","center");
-        $("#css_modal").modal('show');
+        $("#css_modal .modal-footer").css("text-align", "center");
+        $("#css_modal").modal(modalOptions);
     }
 };
 
@@ -1347,7 +1378,7 @@ y.closeModalAlert = function () {
     $("#css_modal .modal-footer"     ).empty();
     $("#css_modal").modal('hide');
 };
-$(document).on("click",".modal-message-save",function(){
+$(document).on("click",".modal-message-confirm",function(){
     if ($(this).attr("modal_confirm_btn")) {
         y.closeModalAlert();
         y.loadLocal($(this), { page_button: $(this).attr("modal_confirm_btn") });
@@ -1869,7 +1900,7 @@ $(document).on("initialize", function (event, target, opts) {
         //  buttonImage         : "/cdn/Axialis/Png/16x16/Calendar.png",
         //  buttonImageOnly     : true,
             dateFormat          : "dd/mm/yy",   // 2-digit year
-        //  shortYearCutoff   	: +50
+        //  shortYearCutoff     : +50
             changeMonth         : true,         // Allow drop downs for month/year
             changeYear          : true,
             yearRange           : "-89:-0",     // Allow selection of -75Y
