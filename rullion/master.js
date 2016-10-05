@@ -242,18 +242,8 @@ y.load = function (target, params, opts) {
 
 /*--------------------------------------------------loadSuccess Handler---------------------------------------------------------*/
 $(document).on("loadSuccess", function (e, target, params, opts, data_back) {
-    var session_timeout_required = (
-        !data_back.logged_out
-        && data_back.max_inactive_interval
-        && data_back.session_timeout_extension_limit
-    );
     y.leaving_trans_page = false;
-    y.sessionTimeout.cancelTimers();
-    if (session_timeout_required) {
-        y.sessionTimeout.initialise(
-            data_back.max_inactive_interval, data_back.session_timeout_extension_limit
-        );
-    }
+    y.sessionTimeout.onLoadSuccess(data_back.logged_out, data_back.session);
     if (data_back.logged_out) {
         y.expecting_unload = true;
         if (y.default_guest) {      // If not logged in and skin HTML defines a default guest a/c
@@ -2366,9 +2356,21 @@ $(document).on("initialize", function (event, target, opts) {
 
 y.sessionTimeout = {};
 
+y.sessionTimeout.onLoadSuccess = function (logged_out, session) {
+    var session_timeout_required = (
+        !logged_out
+        && session.max_inactive_interval
+        && session.timeout_extension_limit
+    );
+    this.cancelTimers();
+    if (session_timeout_required) {
+        this.initialise(session.max_inactive_interval, session.timeout_extension_limit);
+    }
+};
+
 y.sessionTimeout.initialise = function (timeout, extension) {
-    this.extension = extension;
-    this.timeout_handle = setTimeout(this.promptForExtension.bind(this), timeout);
+    this.extension = extension * 1000;
+    this.timeout_handle = setTimeout(this.promptForExtension.bind(this), timeout * 1000);
 };
 
 y.sessionTimeout.promptForExtension = function () {
