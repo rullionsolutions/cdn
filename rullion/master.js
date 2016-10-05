@@ -656,8 +656,6 @@ y.logout = function () {
 /*------------------------------------------------------------Ping--------------------------------------------------------------*/
 y.ping = function () {
     var url_params;
-    var modal_allowed;
-    var modalOptions;
     setTimeout(y.ping, y.ping_interval);
     if (!y.logged_in || !y.session || !y.session.ping_mechanism) {
         return;
