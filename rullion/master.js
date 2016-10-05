@@ -242,7 +242,18 @@ y.load = function (target, params, opts) {
 
 /*--------------------------------------------------loadSuccess Handler---------------------------------------------------------*/
 $(document).on("loadSuccess", function (e, target, params, opts, data_back) {
+    var sessionTimeout = (
+        !data_back.logged_out
+        && data_back.max_inactive_interval
+        && data_back.session_timeout_extension_limit
+    );
     y.leaving_trans_page = false;
+    y.sessionTimeout.cancelTimers();
+    if (sessionTimeout) {
+        y.sessionTimeout.initialise(
+            data_back.max_inactive_interval, data_back.session_timeout_extension_limit
+        );
+    }
     if (data_back.logged_out) {
         y.expecting_unload = true;
         if (y.default_guest) {      // If not logged in and skin HTML defines a default guest a/c
@@ -673,18 +684,6 @@ y.ping = function () {
             y.ping_failures = 0;
             if (typeof data_back === "string" || data_back.logged_out) {
                 window.location = y.skin;
-            } else if (data_back.logout) {
-                y.logout();
-            } else if (data_back.session_extend_prompt) {
-                modal_allowed = $("#css_modal > .modal-messages").length && !$("#css_modal .modal-body").hasClass("css_load_target");
-                modalOptions = {
-                    modal_allowed: modal_allowed,
-                    modal_confirm_btn: "extend",
-                    modal_confirm_text: "Extend",
-                    modal_close: false,
-                };
-                y.addModalMessage("Your session will soon timeout. Please click here to extend your session.", "W");
-                y.showModalAlert(modalOptions);
             }
         },
         error: function (xml_http_request, text_status) {
@@ -1261,7 +1260,7 @@ y.reportMessagesFromServer = function (messages) {
         modal_allowed,
         modal_confirm_btn = false,
         modal_dialog = false,
-        modalOptions;
+        modal_options;
 
     if (!messages || messages.length === 0) {
         return;
@@ -1305,12 +1304,12 @@ y.reportMessagesFromServer = function (messages) {
     if (modal_dialog) {
         modal_confirm_btn = null;
     }
-    modalOptions = {
+    modal_options = {
         modal_allowed: modal_allowed,
         modal_confirm_btn: modal_confirm_btn,
         modal_close: modal_confirm_btn,
     };
-    y.showModalAlert(modalOptions);
+    y.showModalAlert(modal_options);
 };
 
 y.addModalMessage = function (msg_text, msg_type) {
@@ -2366,6 +2365,38 @@ $(document).on("initialize", function (event, target, opts) {
         }
     });
 });
+
+/*-----------------------------------------------------SessionTimeout-----------------------------------------------------------*/
+
+y.sessionTimeout = {};
+
+y.sessionTimeout.initialise = function (timeout, extension) {
+    this.extension = extension;
+    this.timeout_handle = setTimeout(this.promptForExtension.bind(this), timeout);
+};
+
+y.sessionTimeout.promptForExtension = function () {
+    var modal_allowed = $("#css_modal > .modal-messages").length && !$("#css_modal .modal-body").hasClass("css_load_target");
+    var modal_options = {
+        modal_allowed: modal_allowed,
+        modal_confirm_btn: "extend",
+        modal_confirm_text: "Extend",
+        modal_close: false,
+    };
+    y.addModalMessage("Your session will soon timeout. Please click here to extend your session.", "W");
+    y.showModalAlert(modal_options);
+    this.extension_handle = setTimeout(y.logout, this.extension);
+};
+
+y.sessionTimeout.cancelTimers = function () {
+    if (this.timeout_handle) {
+        clearTimeout(this.timeout_handle);
+    }
+    if (this.extension_handle) {
+        clearTimeout(this.extension_handle);
+    }
+};
+
 
 /*-----------------------------------------------------Modal--------------------------------------------------------------------*/
 //Click handlers to load a modal
