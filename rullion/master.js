@@ -1327,9 +1327,9 @@ y.showModalAlert = function (params) {
         backdrop: "static",
         keyboard: "false",
     };
-    var defaultCloseText = ((params.modal_confirm || params.modal_confirm_btn) ? "No" : "OK");
     var modal_confirm_text = params.modal_confirm_text || "Yes";
-    var modal_close_text = params.modal_close_text || defaultCloseText;
+    var default_close_text = ((params.modal_confirm || params.modal_confirm_btn) ? "No" : "OK");
+    var modal_close_text = params.modal_close_text || default_close_text;
     var modal_confirm_attr;
     var modal_close_attr;
 
