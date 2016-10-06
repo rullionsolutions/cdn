@@ -1293,7 +1293,6 @@ y.reportMessagesFromServer = function (messages) {
     modal_options = {
         modal_allowed: modal_allowed,
         modal_confirm_btn: modal_confirm_btn,
-        modal_close: modal_confirm_btn,
     };
     y.showModalAlert(modal_options);
 };
