@@ -60,6 +60,7 @@ input[type="email"], input[type="url"], input[type="search"],
 input[type="tel"], input[type="color"], .uneditable-input { margin-bottom: 0px; }
 .css_align_right input::-ms-clear	{ display: none; }			/* Disable IE clear button ('X') in IE for right aligned inputs */
 input, textarea				{ font-family: "Courier New"; }
+				 .control-group		{ margin-bottom: 0; }
 .form-horizontal .control-group		{ margin-bottom: 10px; }
 .form-horizontal .control-label		{ padding-top: 0; }
 div.controls				{ font-weight: bold; }

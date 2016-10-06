@@ -64,7 +64,7 @@ div.css_main_logo > a		{ display: inline-block; height: 60px; width: 130px; over
 #css_page_header_title > b	{ vertical-align: middle; }
 
 /* Footer */
-footer						{ position: fixed; bottom: 0; width: 100%; margin: 0; font-size: 8pt; font-weight: bold; border-top: 1px solid #E3E3E3; }
+footer						{ position: fixed; bottom: 0; width: 100%; margin: 0; font-size: 8pt; font-weight: bold; border-top: 1px solid #E3E3E3; z-index: 10; }
 footer > div				{ display: inline-block; width: 33%; }
 footer > div > div			{ padding: 5px; }
 footer > div > div#css_footer_copyright		{ text-align: left;   padding-left: 20px; }
