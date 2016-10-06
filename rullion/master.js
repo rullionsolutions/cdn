@@ -1324,7 +1324,7 @@ y.clearModalMessages = function () {
 
 y.showModalAlert = function (params) {
   //If modal messages are present then show the modal window
-    var modalOptions = {
+    var modal_options = {
         backdrop: "static",
         keyboard: "false",
     };
@@ -1345,13 +1345,14 @@ y.showModalAlert = function (params) {
             modal_confirm_attr = (params.modal_confirm_btn ? "modal_confirm_btn='" + params.modal_confirm_btn + "'" : "");
             $("#css_modal .modal-footer").append("<a class='btn btn-large modal-message-confirm' " + modal_confirm_attr + ">" + modal_confirm_text + "</a>");
         }
-        if (params.modal_close || params.modal_close_btn) {
+        if (params.modal_close || params.modal_close_btn
+            || !(params.modal_confirm || params.modal_confirm_btn)) {
             modal_close_attr = (params.modal_close_btn ? "modal_close_btn='" + params.modal_close_btn + "'" : "");
             $("#css_modal .modal-footer").append("<a class='btn btn-large modal-message-close' " + modal_close_attr + ">" + modal_close_text + "</a>");
         }
 
         $("#css_modal .modal-footer").css("text-align", "center");
-        $("#css_modal").modal(modalOptions);
+        $("#css_modal").modal(modal_options);
     }
 };
 
@@ -2370,13 +2371,12 @@ y.sessionTimeout.onLoadSuccess = function (logged_out, session) {
 
 y.sessionTimeout.initialise = function (timeout, extension) {
     this.extension = extension * 1000;
-    this.timeout_handle = setTimeout(this.promptForExtension.bind(this), timeout * 1000);
+    this.extension_timer_handle = setTimeout(this.promptForExtension.bind(this), timeout * 1000);
 };
 
 y.sessionTimeout.promptForExtension = function () {
     var modal_allowed = (
-        $("#css_modal > .modal-messages").length &&
-        !$("#css_modal .modal-body").hasClass("css_load_target")
+        $("#css_modal > .modal-messages").length
     );
     var modal_options = {
         modal_allowed: modal_allowed,
@@ -2386,15 +2386,15 @@ y.sessionTimeout.promptForExtension = function () {
     };
     y.addModalMessage("Your session will soon timeout. Please click here to extend your session.", "W");
     y.showModalAlert(modal_options);
-    this.extension_handle = setTimeout(y.logout, this.extension);
+    this.logout_timer_handle = setTimeout(y.logout, this.extension);
 };
 
 y.sessionTimeout.cancelTimers = function () {
-    if (this.timeout_handle) {
-        clearTimeout(this.timeout_handle);
+    if (this.extension_timer_handle) {
+        clearTimeout(this.extension_timer_handle);
     }
-    if (this.extension_handle) {
-        clearTimeout(this.extension_handle);
+    if (this.logout_timer_handle) {
+        clearTimeout(this.logout_timer_handle);
     }
 };
 
