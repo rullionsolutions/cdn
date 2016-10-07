@@ -1519,15 +1519,20 @@ $(document).on("initialize", function (e, target, opts) {
 });
 
 /*---------------------------------------------Reloadable Field Handlers--------------------------------------------------------*/
-$(document).on("change", ".css_reload :input", function (event) {
+$(document).on("change", ".css_reload > :input", function (event) {
 //    var target = y.getTarget($(this));
     //CL - Try to do this with the selector on the .change call if possible
     if (!($(this).parent().hasClass("css_type_reference") && $(this).parent().children("input").length > 1)) {
         y.last_focused_input = $(this).attr("name");
-        y.loadLocal($(this), {
-            page_button: $(this).attr("name")
-        });
+        y.loadLocal($(this), { page_button: $(this).attr("name") });
     }
+});
+
+// CL - Allows attributes field to trigger a reload
+$(document).on("change", ".css_reload > span > span.css_attr_item > :input", function (event) {
+    y.last_focused_input = $(this).attr("name");
+    y.loadLocal($(this), { page_button: $(this).attr("name") });
+        //Could set last focused input here to avoid focus related scrolling weirdness?
 });
 
 /*-------------------------------------------------------------Field Functions--------------------------------------------------*/
