@@ -1,0 +1,25 @@
+/*Contract specific stylesheet*/
+.underline {
+	text-decoration: underline;
+}
+.bold {
+	font-weight: bold;
+}
+.italics {
+	font-style: italic;
+}
+.float-right {
+	float: right;
+}
+.float-left {
+	float: left;
+}
+.align-centre {
+	text-align: center;
+}
+.align-right {
+	text-align: right;
+}
+.align-left {
+	text-align: left;
+}
