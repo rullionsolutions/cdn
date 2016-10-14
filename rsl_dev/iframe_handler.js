@@ -102,7 +102,7 @@ eventer(messageEvent, function (e) {
 // Initial Load
 $(document).ready(function () {
     var $myr_frame = $('iframe#myrecruiter');
-    var $myr_frame_orig_src = $myr_frame.attr("src");
+    var myr_frame_orig_src = $myr_frame.attr("src");
 
     if (myr_frame_orig_src) {
         myr_src = myr_frame_orig_src;
