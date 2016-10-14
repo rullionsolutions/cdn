@@ -1,6 +1,7 @@
 var loaded = false;
 var last_hash = "";
 var base = (typeof myr_src != "undefined") ? myr_src : "https://localhost:8443/sfwk_devt/";
+var myr_src = base; // to support situations where is undefined
 //Message handler
 var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
 var eventer = window[eventMethod];
