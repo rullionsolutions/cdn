@@ -16,6 +16,37 @@
  * loadError   - main.jsp?mode=post returns with a failure
  */
 
+if (!Array.prototype.some) {
+    Array.prototype.some = function (fun /*, thisArg*/) {
+        "use strict";
+
+        var t;
+        var len;
+        var thisArg;
+        var i;
+
+        if (this == null) {
+            throw new TypeError("Array.prototype.some called on null or undefined");
+        }
+
+        if (typeof fun !== "function") {
+            throw new TypeError();
+        }
+
+        t = Object(this);
+        len = t.length >>> 0;
+
+        thisArg = arguments.length >= 2 ? arguments[1] : void 0;
+        for (i = 0; i < len; i += 1) {
+            if (i in t && fun.call(thisArg, t[i], i, t)) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+}
+
 var y = {},
     qq,
     Viz,
