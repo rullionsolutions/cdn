@@ -243,7 +243,6 @@ y.load = function (target, params, opts) {
 /*--------------------------------------------------loadSuccess Handler---------------------------------------------------------*/
 $(document).on("loadSuccess", function (e, target, params, opts, data_back) {
     y.leaving_trans_page = false;
-    y.sessionTimeout.onLoadSuccess(data_back.logged_out, data_back.session);
     if (data_back.logged_out) {
         y.expecting_unload = true;
         if (y.default_guest) {      // If not logged in and skin HTML defines a default guest a/c
@@ -251,8 +250,10 @@ $(document).on("loadSuccess", function (e, target, params, opts, data_back) {
         } else {
             y.renderLogin(target, opts);
         }
+
     } else if (data_back.session.is_guest && data_back.session.user_id !== y.default_guest) {
         y.logout();         // invalidates current session then redirects
+
     } else if (data_back.page.skin && data_back.page.skin !== y.skin && opts.load_mode !== "modal") {
         window.location = y.getRedirectURL(data_back, y.simple_url);
     } else {
@@ -645,12 +646,11 @@ y.logout = function () {
 
 /*------------------------------------------------------------Ping--------------------------------------------------------------*/
 y.ping = function () {
-    var url_params;
     setTimeout(y.ping, y.ping_interval);
     if (!y.logged_in || !y.session || !y.session.ping_mechanism) {
         return;
     }
-    url_params = "&visit_id=" + y.session.id + "." + y.session.visits;
+    var url_params = "&visit_id=" + y.session.id + "." + y.session.visits;
     if (y.page_active && y.time_stamps. pre_render && y.time_stamps.pre_post) {
         url_params +=   "&post_interval=" + (y.time_stamps. pre_render.getTime() - y.time_stamps.pre_post  .getTime());
     }
@@ -670,6 +670,8 @@ y.ping = function () {
             y.ping_failures = 0;
             if (typeof data_back === "string" || data_back.logged_out) {
                 window.location = y.skin;
+            } else if (data_back.logout) {
+                y.logout();
             }
         },
         error: function (xml_http_request, text_status) {
@@ -1245,8 +1247,7 @@ y.reportMessagesFromServer = function (messages) {
         modal_text = {},
         modal_allowed,
         modal_confirm_btn = false,
-        modal_dialog = false,
-        modal_options;
+        modal_dialog = false;
 
     if (!messages || messages.length === 0) {
         return;
@@ -1290,11 +1291,7 @@ y.reportMessagesFromServer = function (messages) {
     if (modal_dialog) {
         modal_confirm_btn = null;
     }
-    modal_options = {
-        modal_allowed: modal_allowed,
-        modal_confirm_btn: modal_confirm_btn,
-    };
-    y.showModalAlert(modal_options);
+    y.showModalAlert(modal_allowed, modal_confirm_btn);
 };
 
 y.addModalMessage = function (msg_text, msg_type) {
@@ -1321,37 +1318,24 @@ y.clearModalMessages = function () {
     $("#css_modal > .modal-messages").empty();
 };
 
-y.showModalAlert = function (params) {
+y.showModalAlert = function (modal_allowed, modal_confirm_btn) {
   //If modal messages are present then show the modal window
-    var modal_options = {
-        backdrop: "static",
-        keyboard: "false",
-    };
-    var modal_confirm_text = params.modal_confirm_text || "Yes";
-    var default_close_text = ((params.modal_confirm || params.modal_confirm_btn) ? "No" : "OK");
-    var modal_close_text = params.modal_close_text || default_close_text;
-    var modal_confirm_attr;
-    var modal_close_attr;
-
-    if ($("#css_modal > .modal-messages").children().length > 0 && params.modal_allowed) {
+    if ($("#css_modal > .modal-messages").children().length > 0 && modal_allowed) {
         $("#css_modal .modal-header > .close").addClass("hide");
         $("#css_modal .modal-body").empty();
         $("#css_modal .modal-body").addClass("hide");
         $("#css_modal #css_modal_label").text("");
-        $("#css_modal .modal-footer").empty();
+        $("#css_modal .modal-footer"     ).empty();
 
-        if (params.modal_confirm || params.modal_confirm_btn) {
-            modal_confirm_attr = (params.modal_confirm_btn ? "modal_confirm_btn='" + params.modal_confirm_btn + "'" : "");
-            $("#css_modal .modal-footer").append("<a class='btn btn-large modal-message-confirm' " + modal_confirm_attr + ">" + modal_confirm_text + "</a>");
-        }
-        if (params.modal_close || params.modal_close_btn
-            || !(params.modal_confirm || params.modal_confirm_btn)) {
-            modal_close_attr = (params.modal_close_btn ? "modal_close_btn='" + params.modal_close_btn + "'" : "");
-            $("#css_modal .modal-footer").append("<a class='btn btn-large modal-message-close' " + modal_close_attr + ">" + modal_close_text + "</a>");
+        if (modal_confirm_btn) {
+            $("#css_modal .modal-footer").append('<a class="btn btn-large modal-message-save" modal_confirm_btn="'+modal_confirm_btn+'">Yes</a>');
+            $("#css_modal .modal-footer").append('<a class="btn btn-large modal-message-close">No</a>');
+        } else {
+            $("#css_modal .modal-footer").append('<a class="btn btn-large modal-message-close">OK</a>');
         }
 
-        $("#css_modal .modal-footer").css("text-align", "center");
-        $("#css_modal").modal(modal_options);
+        $("#css_modal .modal-footer").css("text-align","center");
+        $("#css_modal").modal('show');
     }
 };
 
@@ -1363,7 +1347,7 @@ y.closeModalAlert = function () {
     $("#css_modal .modal-footer"     ).empty();
     $("#css_modal").modal('hide');
 };
-$(document).on("click",".modal-message-confirm",function(){
+$(document).on("click",".modal-message-save",function(){
     if ($(this).attr("modal_confirm_btn")) {
         y.closeModalAlert();
         y.loadLocal($(this), { page_button: $(this).attr("modal_confirm_btn") });
@@ -1885,7 +1869,7 @@ $(document).on("initialize", function (event, target, opts) {
         //  buttonImage         : "/cdn/Axialis/Png/16x16/Calendar.png",
         //  buttonImageOnly     : true,
             dateFormat          : "dd/mm/yy",   // 2-digit year
-        //  shortYearCutoff     : +50
+        //  shortYearCutoff   	: +50
             changeMonth         : true,         // Allow drop downs for month/year
             changeYear          : true,
             yearRange           : "-89:-0",     // Allow selection of -75Y
@@ -2351,52 +2335,6 @@ $(document).on("initialize", function (event, target, opts) {
         }
     });
 });
-
-/* ------------------------------------SessionTimeout------------------------------------------- */
-
-y.sessionTimeout = {};
-
-y.sessionTimeout.onLoadSuccess = function (logged_out, session) {
-    var session_timeout_required = (
-        !logged_out
-        && session.max_inactive_interval
-        && session.timeout_extension_limit
-    );
-    this.cancelTimers();
-    if (session_timeout_required) {
-        this.initialise(session.max_inactive_interval, session.timeout_extension_limit);
-    }
-};
-
-y.sessionTimeout.initialise = function (timeout, extension) {
-    this.extension = extension * 1000;
-    this.extension_timer_handle = setTimeout(this.promptForExtension.bind(this), timeout * 1000);
-};
-
-y.sessionTimeout.promptForExtension = function () {
-    var modal_allowed = (
-        $("#css_modal > .modal-messages").length
-    );
-    var modal_options = {
-        modal_allowed: modal_allowed,
-        modal_confirm_btn: "extend",
-        modal_confirm_text: "Extend",
-        modal_close: false,
-    };
-    y.addModalMessage("Your session will soon timeout. Please click here to extend your session.", "W");
-    y.showModalAlert(modal_options);
-    this.logout_timer_handle = setTimeout(y.logout, this.extension);
-};
-
-y.sessionTimeout.cancelTimers = function () {
-    if (this.extension_timer_handle) {
-        clearTimeout(this.extension_timer_handle);
-    }
-    if (this.logout_timer_handle) {
-        clearTimeout(this.logout_timer_handle);
-    }
-};
-
 
 /*-----------------------------------------------------Modal--------------------------------------------------------------------*/
 //Click handlers to load a modal
