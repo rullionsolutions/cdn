@@ -397,7 +397,7 @@ x.ui.performAjax = function (params, reload_opts) {
             } else {
                 that.setLoadContent(data_back);
                 if (that.page_skin !== that.skin) {
-                    that.reload(params, { force_load: true });
+                    window.location = that.page_skin + window.location.search;
                 } else {
                     that.activate();
                 }
