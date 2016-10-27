@@ -195,8 +195,7 @@ tr.css_mr_selected > td.css_mr_sel > span.icon-ok	{ display: inline-block; }
 table.css_mr_selecting > tfoot > tr.css_mr_actions > td    { background-color: #cef !important; }
 .css_bulk, .css_bulk_select { margin-left: 5px; }
 
-div.modal.fade.in           { top: 50px; z-index: 2000000001;}       /* Modal window disappears on narrow screens */
-div.modal-backdrop.fade.in  { z-index: 2000000000;}
+div.modal.fade.in			{ top: 50px; }						/* Modal window disappears on narrow screens */
 .modal-footer				{ line-height: 35px; }				/* space between rows of buttons if they wrap around */
 div.css_test				{ background-image: url(../icons/test-env-bg.png); background-repeat: repeat-x; }
 
