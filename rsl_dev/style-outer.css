@@ -41,7 +41,7 @@ li.css_menu_icon					{ padding: 3px 20px }
 }
 .dropdown-menu>li.css_task_all>a { font-weight: bold; text-align: center; text-decoration: underline; }
 
-.dropdown-menu {
+.navbar .dropdown-menu {
 	max-height: calc(100vh - 60px - 81px); /* viewheight - footer - biggest fixed header */
 	overflow-y: auto;
 }
