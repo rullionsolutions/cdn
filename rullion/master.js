@@ -72,6 +72,7 @@ y.guest_logins = 0;
 y.expecting_unload = false;             // set true when deliberately navigating away from current page
 y.leaving_trans_page = false;           // set true when deliberately navigating away from a transactional page
 y.shows_errors_in_modal_alert = false;  //Send all error messages from server to a modal alert
+y.resp_timeout = 300;
 
 /*-----------------------------------------------Initiation Routine-------------------------------------------------------------*/
 $(document).ready(function() {
@@ -277,6 +278,14 @@ $(document).on("loadSuccess", function (e, target, params, opts, data_back) {
     if (!y.logged_in || ( data_back && data_back.session && data_back.session.is_guest)) {
         $("#css_login_block_top").removeClass("hide");
     }
+    if (data_back.hasOwnProperty("session") && data_back.session.hasOwnProperty("max_inactive_interval") &&
+//          data_back.session.ping_mechanism === false &&
+          y.page && y.page.prompt_nav_away) {
+      if (y.hasOwnProperty("timeout")) {
+          window.clearTimeout(y.timeout);
+      }
+      y.timeout = setTimeout(y.promptInactive, ((data_back.session.max_inactive_interval - y.resp_timeout) * 1000));  // seconds - milliseconds
+  }
 });
 
 y.loadSuccessMainPage = function (target, params, opts, data_back) {
@@ -2008,7 +2017,8 @@ $(document).on("initialize", function (event, target, opts) {
                             /*jslint nomen: true */
                             map[obj.value] = obj._key;
                         });
-                        process(out);
+
+                       process(out);
                         //add extra row in case of more results
                         if (data.results.length < data.meta.found_rows) {
                             field.children('ul.typeahead').append(
@@ -2650,3 +2660,83 @@ $(document).on("click", ".css_bulk_select", function (event) {
     slct_elem.val(JSON.stringify(array));
 });
 //end C9918
+
+// C8972
+y.promptInactive = function() {
+    var modal,
+        buttons,
+        timeout;
+    buttons = [{ callback: function(m) {
+                if (modal.timeout) {
+                    window.clearTimeout(modal.timeout);
+                }
+                modal.modal("hide");
+                y.loadLocal($(this), {
+                    page_button: "cancel_new",
+                    reason: "session_timeout",
+                });
+            }
+        }];
+    timeout = {wait: y.resp_timeout*1000, callback: function(m) {modal.modal("hide");alert("Your session may have timed out");}};
+    modal = y.prompt("Due to inactivity your session is about to time-out. Click OK to continue...", buttons, timeout);
+};
+
+y.prompt = function(message, buttons, timeout) {
+    var modal;
+    modal = $("#css_modal");
+    modal.children(".modal-header").hide();
+    modal.children(".modal-body").empty();
+    modal.children(".modal-body").html(message);
+    modal.children("#css_modal_label").text("");
+    modal.children(".modal-footer"     ).empty();
+    modal.children(".modal-footer").css("text-align","center");
+    modal.buttons = y.addPromptButtons(modal, buttons);
+    modal.timeout = y.setPromptTimeout(modal, timeout);
+    modal.modal('show');
+    return modal;
+};
+
+y.addPromptButtons = function (modal, buttons) {
+    var result = [], i;
+    if (!buttons || buttons.length === 0) {
+        y.addPromptButton(modal);
+    } else {
+        for (i = 0; i < buttons.length; i += 1) {
+            result.push(y.addPromptButton(modal, buttons[i].label, buttons[i].callback));
+        }
+    }
+    return result;
+};
+
+y.addPromptButton = function (modal, label, callback) {
+    var button,
+        c;
+    if (!label) {
+        label = "Ok";
+    }
+    if (!callback) {
+        c = function() {
+            modal.modal("hide");
+        };
+    } else {
+        c = callback;
+    }
+    button =         $('<a class="btn modal-prompt">'+label+'</a>').appendTo(modal.children(".modal-footer"));
+    button.click(function(){c.call(y, modal);});
+    return button;
+};
+
+y.setPromptTimeout = function (modal, timeout) {
+    var event;
+    if (!timeout || !timeout.hasOwnProperty("wait")) {
+        return null;
+    }
+    if (!timeout.hasOwnProperty("callback")) {
+        timeout.callback = function(m) {
+            m.modal("hide");
+        };
+    }
+    event = setTimeout(function(){timeout.callback.call(y, modal);}, timeout.wait);
+    return event;
+};
+// end C8972
