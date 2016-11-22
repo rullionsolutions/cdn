@@ -2415,9 +2415,7 @@ $(document).on("click", "a.css_open_in_modal", function (event) {
         return false;
     }
     if ($(this).hasClass("css_bulk")) {
-        url += "&selected_keys=" + $(this).siblings(":input").val() +
-            "&refer_page=" + y.page.id + "&refer_section=" + section_id;
-        $(this).siblings(":input").val("");
+        url += y.bulk.getURLParams($(this)) + "&refer_page=" + y.page.id + "&refer_section=" + section_id;
     }
     y.remoteModal(url);
     return false;
@@ -2578,58 +2576,106 @@ y.checkStyle = function (src) {
 };
 
 /** Bulk functionality */
-function mouseoverRow(row) {
-    var slct_elem = y.multiselect_table.find("tr.css_mr_actions > td > input"),
-        array = JSON.parse(slct_elem.val() || "[]"),
-        key = row.attr("data-key"),
-        elem_count; //C9918
+y.bulk = {};
 
-    if (y.mouse_deselect) {
-        row.removeClass("css_mr_selected");
-        if (array.indexOf(key) > -1) {
-            array.splice(array.indexOf(key), 1);
-            slct_elem.val(JSON.stringify(array));
-        }
+y.bulk.getKeyArray = function () {
+    return y.multiselect_table.data("bulk_selection_key_array") || [];
+};
 
-    } else {
+y.bulk.updateRowSelection = function (key_array, row, select) {
+    var key = row.attr("data-key");
+    if (select) {
         row   .addClass("css_mr_selected");
-        if (array.indexOf(key) === -1) {
-            array.push(key);
-            slct_elem.val(JSON.stringify(array));
+        if (key_array.indexOf(key) === -1) {
+            key_array.push(key);
+        }
+    } else {
+        row.removeClass("css_mr_selected");
+        if (key_array.indexOf(key) > -1) {
+            key_array.splice(key_array.indexOf(key), 1);
         }
     }
-    elem_count = array.length; //C9918
-    y.multiselect_table.find("tr.css_mr_actions > td > div[name=list_bulk_count]").html(elem_count + " " + (elem_count !== 1 ? "rows" : "row") + " selected"); //C9918
+};
+
+y.bulk.setKeyArray = function (key_array) {
+    var elem_count = key_array.length;
+    y.multiselect_table.data("bulk_selection_key_array", key_array);
+    y.multiselect_table.find("tr.css_mr_actions .css_bulk_rowcount").html(elem_count + " " + (elem_count !== 1 ? "rows" : "row") + " selected");
+    y.multiselect_table.find("tr.css_mr_actions > input").val(JSON.stringify(key_array));
+    if (key_array.length > 0) {
+        y.multiselect_table   .addClass("css_mr_selecting");
+        y.multiselect_table.find("tr.css_mr_actions > td > span.btn-group > a.css_bulk").removeClass("disabled");
+    } else {
+        y.multiselect_table.removeClass("css_mr_selecting");
+        y.multiselect_table.find("tr.css_mr_actions > td > span.btn-group > a.css_bulk").addClass("disabled");
+    }
+
+};
+
+y.bulk.mouseoverRow = function(row) {
+    var key_array = this.getKeyArray();
+    this.updateRowSelection(key_array, row, !y.mouse_deselect);
+    this.setKeyArray(key_array);
+};
+
+y.bulk.getURLParams = function (btn_elem) {
+    var table = $(btn_elem).parents("table");
+    var out = "&selected_keys=" + JSON.stringify(table.data("bulk_selection_key_array") || []);
+    table.data("bulk_selection_key_array", []);
+    return out;
 }
+
+
+
 $(document).on("mousedown", "td.css_mr_sel"  , function(event) {
     y.multiselect_table = $(this).parent("tr").parent("tbody").parent("table");
     y.mouse_deselect    = $(this).parent("tr").hasClass("css_mr_selected");
-    mouseoverRow($(this).parent());
+    y.bulk.mouseoverRow($(this).parent());
     return false;
 });
 $(document).on("mouseover", "td.css_mr_sel"  , function(event) {
     if (y.multiselect_table) {
-        mouseoverRow($(this).parent());
+        y.bulk.mouseoverRow($(this).parent());
     }
 });
-$(document).on("mouseup",                      function(event) {
-    var slct_elem;
-    if (!y.multiselect_table) {
-        return;
-    }
-    slct_elem = y.multiselect_table.find("tr.css_mr_actions > td > input");
-    if (JSON.parse(slct_elem.val() || "[]").length > 0) {
-        y.multiselect_table   .addClass("css_mr_selecting");
-        y.multiselect_table.find("tr.css_mr_actions > td > a.css_bulk").removeClass("disabled");
-    } else {
-        y.multiselect_table.removeClass("css_mr_selecting");
-        y.multiselect_table.find("tr.css_mr_actions > td > a.css_bulk").addClass("disabled");
-    }
+$(document).on("mouseup", function (event) {
     y.multiselect_table = null;
 });
-$(document).on("click", "td.css_mr_sel"     , function (event) {
+
+$(document).on("click", "td.css_mr_sel", function (event) {
     return false;
 });
+
+
+//C9918
+$(document).on("click", ".css_bulk_select", function (event) {
+    var select = $(this).hasClass("all"),
+        key_array;
+
+    y.multiselect_table = $(this).parents("table");
+    key_array = y.bulk.getKeyArray();
+    // if (select) {
+    //     if (!!$(this).parent("tfood").find("span.css_list_control")) {
+    //         y.addMessage("Only the visible rows have been selected", "W");
+    //     }
+    // }
+
+    $(this).parents("table").children("tbody").children("tr").each(function () {
+        y.bulk.updateRowSelection(key_array, $(this), select);
+    });
+
+    $(this).parent().children("a").each(function () {
+        if ($(this).hasClass("disabled") && select) {
+            $(this).removeClass("disabled");
+        } else if (!select && !$(this).hasClass("disabled") && key_array.length === 0 && !$(this).hasClass("css_bulk_select")) {
+            $(this).addClass("disabled");
+        }
+    });
+    y.bulk.setKeyArray(key_array);
+    y.multiselect_table = null;
+});
+//end C9918
+
 
 /** end Bulk */
 
@@ -2671,44 +2717,3 @@ $(document).on("initialize", function (event, target, opts) {
           enablePluginSmoothing: true, features: ['playpause','progress','current','duration','fullscreen']});
   });
 });
-
-//C9918
-$(document).on("click", ".css_bulk_select", function (event) {
-    var select = $(this).hasClass("all"),
-        slct_elem = $(this).parent().find("input"),
-        array = JSON.parse(slct_elem.val() || "[]"),
-        elem_count,
-        key;
-
-    if (select) {
-        if (!!$(this).parent("tfood").find("span.css_list_control")) {
-            y.addMessage("Only the visible rows have been selected", "W");
-        }
-    }
-
-    $(this).parents("table").children("tbody").children("tr").each(function() {
-        key = $(this).attr("data-key");
-        if (select) {
-            $(this).addClass("css_mr_selected");
-            if (array.indexOf(key) === -1) {
-                array.push(key);
-            }
-        } else {
-            $(this).removeClass("css_mr_selected");
-            array.splice(array.indexOf(key), 1);
-        }
-    });
-
-    $(this).parent().children("a").each(function () {
-        if ($(this).hasClass("disabled") && select) {
-            $(this).removeClass("disabled");
-        } else if (!select && !$(this).hasClass("disabled") && array.length === 0 && !$(this).hasClass("css_bulk_select")) {
-            $(this).addClass("disabled");
-        }
-    });
-
-    elem_count = array.length;
-    $(this).parent().find("div[name=list_bulk_count]").html(elem_count + " " + (elem_count !== 1 ? "rows" : "row") + " selected"); //C9918
-    slct_elem.val(JSON.stringify(array));
-});
-//end C9918

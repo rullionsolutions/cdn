@@ -46,6 +46,8 @@ li.css_menu_icon					{ padding: 3px 20px }
 	overflow-y: auto;
 }
 
+div.css_test				{ background-image: url(/cdn/icons/test-env-bg.png); background-repeat: repeat-x; }
+
 /* Left / Top Bars */
 #top_bar					{ margin-top: 40px; }
 #top_bar .btn				{ margin: 0px 4px 4px 0px; }
