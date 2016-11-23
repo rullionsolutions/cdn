@@ -2175,6 +2175,9 @@ $(document).on("initialize", function (event, target, opts) {
       });
 
         $(textarea).blur(function () {
+            $(textarea).html(
+                $(textarea).html().replace(/<\/?[^>]+(>|$)/g, "").trim()
+            );
             y.fieldBlur(textarea);
         });
         //Append Mandatory span tags to parent - Move to Server side??
