@@ -2717,3 +2717,15 @@ $(document).on("initialize", function (event, target, opts) {
           enablePluginSmoothing: true, features: ['playpause','progress','current','duration','fullscreen']});
   });
 });
+
+$(document).on("click", ".css_bulk_non_modal", function (event) {
+
+    if ($(this).hasClass("disabled")) {
+        return false;
+    }
+
+    if ($(this).hasClass("css_bulk")) {
+        $(this).attr("href", $(this).attr("href") + "&selected_keys=" + $(this).siblings(":input").val());
+        $(this).siblings(":input").val("");
+    }
+});
