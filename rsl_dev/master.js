@@ -2314,9 +2314,9 @@ $(document).on("initialize", function (event, target, opts) {
             $(this).find("div.css_chart").css("height", obj.options.height || "400px");
             $.plot($(this).find("div.css_chart"), obj.series, obj.options);
         } else if (obj.library === "highcharts") {
-            y.checkScript("/cdn/highcharts-3.0.0/highcharts.js");
-            y.checkScript("/cdn/highcharts-3.0.0/highcharts-more.js");
-            y.checkScript("/cdn/highcharts-3.0.0/exporting.js");
+            y.checkScript("/cdn/highcharts-3.0.10/highcharts.js");
+            y.checkScript("/cdn/highcharts-3.0.10/highcharts-more.js");
+            y.checkScript("/cdn/highcharts-3.0.10/exporting.js");
             y.checkScript("style/highcharts_defaults.js");
             new_obj = obj.options;
             //new_obj.series = obj.series;
@@ -2336,7 +2336,7 @@ $(document).on("initialize", function (event, target, opts) {
 
             if (enable_regression) {
 //                console.log(enable_regression);
-                y.checkScript("/cdn/highcharts-3.0.0/highcharts-regression.js");
+                y.checkScript("/cdn/highcharts-3.0.10/highcharts-regression.js");
             }
 
             chart = new Highcharts.Chart(new_obj);

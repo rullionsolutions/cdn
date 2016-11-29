@@ -26,9 +26,9 @@ y.setupChart = function () {
         $(this).find("div.css_chart").css("height", obj.options.height || "400px");
         $.plot($(this).find("div.css_chart"), obj.series, obj.options);
     } else if (obj.library === "highcharts") {
-        y.checkScript("/cdn/highcharts-3.0.0/highcharts.js");
-        y.checkScript("/cdn/highcharts-3.0.0/highcharts-more.js");
-        y.checkScript("/cdn/highcharts-3.0.0/exporting.js");
+        y.checkScript("/cdn/highcharts-3.0.10/highcharts.js");
+        y.checkScript("/cdn/highcharts-3.0.10/highcharts-more.js");
+        y.checkScript("/cdn/highcharts-3.0.10/exporting.js");
         y.checkScript("rullion/highcharts_defaults.js");
         for (i = 0; i < obj.series.length; i += 1) {
             if (obj.series[i].x_type === "date") {

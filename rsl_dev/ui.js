@@ -1190,9 +1190,9 @@ x.ui.activateChart = function () {
         $(this).find("div.css_chart").css("height", obj.options.height || "400px");
         $.plot($(this).find("div.css_chart"), obj.series, obj.options);
     } else if (obj.library === "highcharts") {
-        x.ui.checkScript("/cdn/highcharts-3.0.0/highcharts.js");
-        x.ui.checkScript("/cdn/highcharts-3.0.0/highcharts-more.js");
-        x.ui.checkScript("/cdn/highcharts-3.0.0/exporting.js");
+        x.ui.checkScript("/cdn/highcharts-3.0.10/highcharts.js");
+        x.ui.checkScript("/cdn/highcharts-3.0.10/highcharts-more.js");
+        x.ui.checkScript("/cdn/highcharts-3.0.10/exporting.js");
         x.ui.checkScript("highcharts_defaults.js");
         new_obj = obj.options;
         new_obj.series = obj.series;
@@ -1206,7 +1206,7 @@ x.ui.activateChart = function () {
 
         if (enable_regression) {
             x.ui.debug(enable_regression);
-            x.ui.checkScript("/cdn/highcharts-3.0.0/highcharts-regression.js");
+            x.ui.checkScript("/cdn/highcharts-3.0.10/highcharts-regression.js");
         }
         obj = new Highcharts.Chart(new_obj);
     //} else if (obj.library === "google") {
