@@ -1503,6 +1503,9 @@ $(document).on("keyup", function (event) {
         && node
         && ($(node).attr("type") === "text" || $(node).attr("type") === "password")) {
         button = $(node).closest(".css_section").find(".css_button_main");
+        if (button.length === 0) {
+            button = $(node).parents("form").find(".css_button_main");
+        }
         if (button.length > 0) {
             button.click();
         }
