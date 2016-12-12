@@ -1496,14 +1496,13 @@ $(document).on("click", ".css_cmd", function (event) {
 
 /*---------------------submit on enter key if .css_button_main specified - deactivated for the moment---------------------------*/
 $(document).on("keyup", function (event) {
-    var node = event.target || event.srcElement,
-        button;
+    var node = event.target || event.srcElement;
+    var button;
     y.last_key_pressed = event.keyCode;
-    if ((event.keyCode === 13) && node && ($(node).attr("type") === "text" || $(node).attr("type") === "password"))  {
+    if ((event.keyCode === 13)
+        && node
+        && ($(node).attr("type") === "text" || $(node).attr("type") === "password")) {
         button = $(node).closest(".css_section").find(".css_button_main");
-        if (button.length === 0) {
-            button = $(".css_button_main");
-        }
         if (button.length > 0) {
             button.click();
         }
