@@ -301,10 +301,6 @@ $(document).on("loadSuccess", function (e, target, params, opts, data_back) {
             y.addMessage("Unrecognized load_mode: " + opts.load_mode, 'E');
         }
     }
-
-    if (!y.logged_in || ( data_back && data_back.session && data_back.session.is_guest)) {
-        $("#css_login_block_top").removeClass("hide");
-    }
 });
 
 y.loadSuccessMainPage = function (target, params, opts, data_back) {

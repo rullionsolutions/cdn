@@ -58,6 +58,11 @@ input[type="datetime-local"], input[type="date"], input[type="month"],
 input[type="time"], input[type="week"], input[type="number"],
 input[type="email"], input[type="url"], input[type="search"],
 input[type="tel"], input[type="color"], .uneditable-input { margin-bottom: 0px; }
+
+@media (max-width: 767px) 	{
+	#css_login_block_top > input, #css_login_block_top > a { margin-bottom: 10px	; }
+}
+
 .css_align_right input::-ms-clear	{ display: none; }			/* Disable IE clear button ('X') in IE for right aligned inputs */
 input, textarea				{ font-family: "Courier New"; }
 				 .control-group		{ margin-bottom: 0; }
