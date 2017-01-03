@@ -50,11 +50,6 @@ li.css_menu_icon					{ padding: 3px 20px }
 }
 .dropdown-menu>li.css_task_all>a { font-weight: bold; text-align: center; text-decoration: underline; }
 
-.navbar .dropdown-menu {
-	max-height: calc(100vh - 60px - 81px); /* viewheight - footer - biggest fixed header */
-	overflow-y: auto;
-}
-
 div.css_test				{ background-image: url(/cdn/icons/test-env-bg.png); background-repeat: repeat-x; }
 
 /* Left / Top Bars */
