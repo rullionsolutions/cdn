@@ -47,6 +47,34 @@ if (!Array.prototype.some) {
     };
 }
 
+if (!Function.prototype.bind) {
+ Function.prototype.bind = function(oThis) {
+   if (typeof this !== 'function') {
+     // closest thing possible to the ECMAScript 5
+     // internal IsCallable function
+     throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+   }
+
+   var aArgs   = Array.prototype.slice.call(arguments, 1),
+       fToBind = this,
+       fNOP    = function() {},
+       fBound  = function() {
+         return fToBind.apply(this instanceof fNOP
+                ? this
+                : oThis,
+                aArgs.concat(Array.prototype.slice.call(arguments)));
+       };
+
+   if (this.prototype) {
+     // Function.prototype doesn't have a prototype property
+     fNOP.prototype = this.prototype;
+   }
+   fBound.prototype = new fNOP();
+
+   return fBound;
+ };
+}
+
 var y = {},
     qq,
     Viz,
@@ -1015,22 +1043,57 @@ y.updateMenuUL = function (ul) {
 };
 y.updateMenuHorizUL = function (ul) {
     var win_width = $(window).width() - 40;
+    var offset;
 
-    //Reset styling
-    ul.removeClass("pull-left" );
-    ul.removeClass("pull-right");
+    //if (y.narrow_ui !== true && y.ui_resize !== false) {
+        ul.css("left", "");
+        ul.css("width", "");
 
-    //Position UL Left or Right to avoid horizontal overflow
-    if (ul.parent(".dropdown-submenu").length > 0) {
-        y.updateSubmenuHoriz(ul);
-    } else {
-        if ((ul.offset().left + ul.width()) > win_width) {
-            //Place Main Dropdown Left
-            ul.addClass("pull-right");
-        }else{
-            //Place Main Dropdown Right
-            ul.removeClass("pull-right");
+        //Reset styling
+        ul.removeClass("pull-left" );
+        ul.removeClass("pull-right");
+        ul.removeClass("narrow");
+
+        //Position UL Left or Right to avoid horizontal overflow
+
+        //Position UL Left or Right to avoid horizontal overflow
+        if (ul.parent(".dropdown-submenu").length > 0) {
+            y.updateSubmenuHoriz(ul);
+        } else {
+            if ((ul.offset().left + ul.width()) > win_width) {
+                //Place Main Dropdown Left
+                ul.addClass("pull-right");
+            }else{
+                //Place Main Dropdown Right
+                ul.removeClass("pull-right");
+            }
         }
+  //  }
+
+    offset = ul.offset();
+    if (offset.left < 0 || ($(window).width() - (offset.left + ul.outerWidth())) < 0) {
+        ul.removeClass("pull-left" );
+        ul.removeClass("pull-right");
+        offset = ul.offset();
+        ul.addClass("narrow");
+        //$(".nav>li>.dropdown-menu").each(function () {
+            if (offset.left > 0) {
+               ul.attr("off", offset.left);
+                ul.css("left", offset.left * -1 + 20);
+            } else {
+                console.log(offset);
+                ul.attr("off", offset.left);
+                ul.css("left", 20);
+            }
+            ul.css("width", win_width);
+            console.log(ul.offset().left + ", " + ($(window).width() - (ul.offset().left + ul.outerWidth())));
+            if (ul.offset().left > 20 && ($(window).width() - (ul.offset().left + ul.outerWidth())) < 0) {
+                offset = ul.offset();
+                console.log("test2 " + offset.left);
+                ul.attr("off", offset.left);
+                ul.css("left", offset.left * -1 + 20);
+            }
+        //});
     }
 };
 y.updateSubmenuHoriz = function (ul) {
