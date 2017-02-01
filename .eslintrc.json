@@ -1,0 +1,41 @@
+{
+    "extends": "airbnb-base/legacy",
+    "env": {
+        "browser": false,
+        "node": false
+    },
+    "globals": {
+        "x": true
+    },
+    "rules": {
+        "comma-dangle": ["warn", "always"],
+        "quotes": ["warn", "double", { "avoidEscape": false }],
+        "indent": ["warn", 4, { "SwitchCase": 1, "VariableDeclarator": 1, "outerIIFEBody": 1 }],
+        "object-property-newline": ["warn", {
+            "allowMultiplePropertiesPerLine": false
+        }],
+        "func-names": ["warn", "never"],
+        "no-unused-vars": ["warn", { "vars": "all", "args": "none" }],
+        "camelcase": 0,
+
+        "comma-spacing": ["warn", { "before": false, "after": true }],
+        "no-multi-spaces": "warn",
+        "key-spacing": ["warn", { "beforeColon": false, "afterColon": true }],
+        "space-in-parens": ["warn", "never"],
+        "one-var": ["warn", "never"],
+        "no-trailing-spaces": "warn",
+        "no-multiple-empty-lines": ["warn", { "max": 2, "maxEOF": 1 }],
+        "no-whitespace-before-property": "warn",
+        "no-param-reassign": 0,
+        "spaced-comment": ["warn", "always", {
+            "exceptions": ["-", "+"],
+            "markers": ["=", "!"]
+        }],
+        "max-len": ["warn", 100, 2, {
+            "ignoreUrls": true,
+            "ignoreComments": false,
+            "ignoreStrings": true,
+            "ignoreTemplateLiterals": true
+        }]
+    }
+}
