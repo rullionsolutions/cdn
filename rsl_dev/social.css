@@ -1,7 +1,7 @@
 
 /* Job search page results */
 .css_job_block > div.css_share_links			{ border-top-left-radius: 4px; float:right; margin-top: 5px; }
-a.social { width:32px; height: 25px; padding:0px; border: none;}
+a.social { width:32px; height: 25px; padding:0px; border: none; background-color: transparent; background-image: none; box-shadow:none; }
 a.social:hover {background-color: inherit; background-position: 0px;}
 a.FB	{ background: url('facebook-32.png') no-repeat; 			 }
 a.TW	{ background: url('twitter-32.png' ) no-repeat; 			 }
