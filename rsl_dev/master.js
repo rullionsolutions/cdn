@@ -209,7 +209,8 @@ y.load = function (target, params, opts) {
     y.clearMessages();//clear messages at the beginning of a load
     if (opts.load_mode === "main") {
         y.time_stamps.pre_post = new Date();
-        opts.scroll_top = opts.scroll_top || $(window).scrollTop();
+    // use window.top to cover the situation of being inside the iframe - Cand Portal integration
+        opts.scroll_top = opts.scroll_top || $(window.top).scrollTop();
     }
 
 //    target.find(":input").trigger("prepost");//Event to convert input value before post request
@@ -433,8 +434,6 @@ $(document).on("initialize", function (e, target, opts) {
         }
         //Set Timestamp
         y.time_stamps.post_render = new Date();
-        //Set scroll
-        $(window).scrollTop(opts.scroll_top);
     }
 });
 
@@ -469,6 +468,11 @@ $(document).on("initialize", function (e, target, opts) {
         input.focus();
     }
     y.last_key_pressed = null;
+
+    // Set scroll - AFTER setting field focus
+    if (opts.load_mode === "main") {
+        $(window).scrollTop(opts.scroll_top);
+    }
 });
 
 //Load page includes assets
