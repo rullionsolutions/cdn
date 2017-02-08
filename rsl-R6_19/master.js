@@ -1664,6 +1664,7 @@ y.fieldFocus = function (field) {
 
 y.getFieldId = function (field) {
     return $(field).attr("id") || $(field).attr("name");
+};
 
 
 // Need to re-factor this function!
