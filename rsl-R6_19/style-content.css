@@ -59,10 +59,6 @@ input[type="time"], input[type="week"], input[type="number"],
 input[type="email"], input[type="url"], input[type="search"],
 input[type="tel"], input[type="color"], .uneditable-input { margin-bottom: 0px; }
 
-@media (max-width: 767px) 	{
-	#css_login_block_top > input, #css_login_block_top > a { margin-bottom: 10px	; }
-}
-
 .css_align_right input::-ms-clear	{ display: none; }			/* Disable IE clear button ('X') in IE for right aligned inputs */
 input, textarea				{ font-family: "Courier New"; }
 				 .control-group		{ margin-bottom: 0; }
@@ -263,4 +259,8 @@ div.css_page_buttons > button	{ margin-right: 10px; }
     .radiusParent {
         margin-left: 0px !important;
     }
+}
+
+.css_resp_div_block > * {
+    margin: 4px 4px 0px 0px;
 }
