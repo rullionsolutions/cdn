@@ -442,7 +442,8 @@ $(document).on("initialize", function (e, target, opts) {
         input;
 
     //Focus on next input
-    target.find("div.css_edit").each(function() {
+    target.find("div.css_edit").each(function () {
+        var field = $(this).children(":input");
         if ($(this).children(":input").length > 0) {
             if (focus_next_input === true) {
                 focus_next_input = field;
