@@ -245,6 +245,16 @@ div.css_page_buttons > button	{ margin-right: 10px; }
 .navbar .nav > .active > a:hover	{ box-shadow: none; }
 .navbar .nav > .active > a:focus	{ box-shadow: none; }
 
+.radiusfilter2 {
+    margin-right: 4px;
+}
+
+@media (max-width:439px) {
+    .radiusfilter {
+        margin-top: 4px;
+    }
+}
+
 .radiusParent {
     margin-left: -10px !important;
 }
