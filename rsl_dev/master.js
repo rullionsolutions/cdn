@@ -1621,6 +1621,7 @@ $(document).on("initialize", function (e, target, opts) {
         if (json_obj.input_mask && !$(this).hasClass("css_type_date")) {
             y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             $(this).find(":input").mask(json_obj.input_mask);
+            $(this).find(":input").attr("maxlength", "99");
         }
     });
 });
@@ -1886,6 +1887,7 @@ $(document).on("initialize", function (event, target, opts) {
         if (json_obj.input_mask && !$(this).hasClass("css_type_date")) {
             y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             $(this).find(":input").mask(json_obj.input_mask);
+            $(this).find(":input").attr("maxlength", "99");
         }
     });
 });
@@ -1920,10 +1922,12 @@ $(document).on("initialize", function (event, target, opts) {
         if (json_obj.input_mask1) {
             y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             input1.mask(json_obj.input_mask1);
+            input1.attr("maxlength", "99");
         }
         if (json_obj.input_mask2) {
             y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             input2.mask(json_obj.input_mask2);
+            input2.attr("maxlength", "99");
         }
     });
 });
@@ -1962,10 +1966,12 @@ $(document).on("initialize", function (event, target, opts) {
         if (json_obj.date_input_mask) {
             y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             nino_date_input.mask(json_obj.date_input_mask);
+            nino_date_input.attr("maxlength", "99");
         }
         if (json_obj.ni_input_mask) {
             y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             nino_text_input.mask(json_obj.ni_input_mask, {autoclear: false});
+            nino_text_input.attr("maxlength", "99");
         }
         // if (json_obj.input_mask2) {
         //     y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
