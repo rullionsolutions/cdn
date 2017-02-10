@@ -1619,7 +1619,7 @@ $(document).on("initialize", function (e, target, opts) {
             }
         }
         if (json_obj.input_mask && !$(this).hasClass("css_type_date")) {
-            y.applyMask($(this).find(":iput"), json_obj.input_mask);
+            y.applyMask($(this).find(":input"), json_obj.input_mask);
         }
     });
 });
@@ -1890,7 +1890,7 @@ $(document).on("initialize", function (event, target, opts) {
         $(this).find(":input").datepicker(dp_settings);
 
         if (json_obj.input_mask && !$(this).hasClass("css_type_date")) {
-            y.applyMask($(this).find(":iput"), json_obj.input_mask);
+            y.applyMask($(this).find(":input"), json_obj.input_mask);
         }
     });
 });
