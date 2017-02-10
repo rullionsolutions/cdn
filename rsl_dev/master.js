@@ -1966,7 +1966,7 @@ $(document).on("initialize", function (event, target, opts) {
             y.applyMask(nino_date_input, json_obj.date_input_mask);
         }
         if (json_obj.ni_input_mask) {
-            y.applyMask(nino_date_input, json_obj.ni_input_mask, {
+            y.applyMask(nino_text_input, json_obj.ni_input_mask, {
                 autoclear: false,
             });
         }
