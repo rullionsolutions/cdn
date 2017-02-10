@@ -210,7 +210,7 @@ y.load = function (target, params, opts) {
     if (opts.load_mode === "main") {
         y.time_stamps.pre_post = new Date();
     // use window.top to cover the situation of being inside the iframe - Cand Portal integration
-        opts.scroll_top = opts.scroll_top || $(window.top).scrollTop();
+        opts.scroll_top = opts.scroll_top || $(window).scrollTop();
     }
 
 //    target.find(":input").trigger("prepost");//Event to convert input value before post request
