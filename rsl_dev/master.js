@@ -1637,7 +1637,7 @@ $(document).on("change", ".css_reload :input", function (event) {
 });
 
 /*-------------------------------------------------------------Field Functions--------------------------------------------------*/
-y.applyMask = function ($field, input_mask, addl_spec) {
+y.applyMask = function (field, input_mask, addl_spec) {
     y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
     $field.mask(input_mask, addl_spec);
     // next line to fix an issue affecting android >= 4.x
