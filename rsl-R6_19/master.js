@@ -209,7 +209,7 @@ y.load = function (target, params, opts) {
     y.clearMessages();//clear messages at the beginning of a load
     if (opts.load_mode === "main") {
         y.time_stamps.pre_post = new Date();
-        opts.scroll_top = opts.scroll_top || $(window.top).scrollTop();
+        opts.scroll_top = opts.scroll_top || $(window).scrollTop();
     }
 
 //    target.find(":input").trigger("prepost");//Event to convert input value before post request
@@ -1660,7 +1660,7 @@ y.fieldFocus = function (field) {
 //        $(field).val("");
 //        $(field).removeClass("css_helper_text");
 //    }
-    y.last_focused_input = y.getFieldId(field); 
+    y.last_focused_input = y.getFieldId(field);
 };
 
 y.getFieldId = function (field) {
