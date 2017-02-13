@@ -2789,7 +2789,8 @@ $(document).on("click", ".css_bulk_non_modal", function (event) {
     }
 
     if ($(this).hasClass("css_bulk")) {
-        $(this).attr("href", $(this).attr("href") + "&selected_keys=" + $(this).siblings(":input").val());
+        $(this).attr("href", $(this).attr("href") + "&selected_keys="
+            + JSON.stringify($(this).closest("table").data("bulk_selection_key_array") || []));
         $(this).siblings(":input").val("");
     }
 });
