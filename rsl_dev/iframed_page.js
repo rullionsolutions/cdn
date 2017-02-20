@@ -3,7 +3,7 @@ y.update_iframe = function (target, redirect) {
     var hash = "";
     var height1;
     var height2;
-    var title;
+    var title = "";
 
     //Resize iframe if present
     if (top !== self) {
@@ -26,8 +26,9 @@ y.update_iframe = function (target, redirect) {
         // Use helper file on client's domain to avoid cross domain problems
         height1 = 40;
         height2 = $("div#css_content").height() + 40;
-        title = y.iframe_title + " - " + $("span#css_page_header_title").text();
-
+        if (y.iframe_title) {
+            title = y.iframe_title + " - " + $("span#css_page_header_title").text();
+        }
         if (params.page_id) {
             hash += "page_id=" + params.page_id;
             if (params.page_key) {
@@ -93,9 +94,6 @@ eventer(messageEvent, function (e) {
         p = jQuery.parseJSON(e.data);
     } catch (e) {
         p = {};
-    }
-    if (p.host_url) {
-        y.share_url = p.host_url;
     }
     // content to iframe 'ping'
     if (p.start_ping) {
