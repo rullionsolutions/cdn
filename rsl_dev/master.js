@@ -1638,11 +1638,18 @@ $(document).on("change", ".css_reload :input", function (event) {
 
 /*-------------------------------------------------------------Field Functions--------------------------------------------------*/
 y.applyMask = function (field, input_mask, addl_spec) {
+    var container = field && field.parents(".css_edit").first();
     y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
     field.mask(input_mask, addl_spec);
     // next line to fix an issue affecting android >= 4.x
     field.removeAttr("maxlength");
-    field.attr("type", "tel");
+    // follows hacks suggested by the author
+    if (container && (
+        container.hasClass("css_type_datetime") ||
+        container.hasClass("css_type_time")
+    )) {
+        field.attr("type", "tel");
+    }
 };
 
 y.getRenderData = function (field) {
