@@ -1642,6 +1642,7 @@ y.applyMask = function (field, input_mask, addl_spec) {
     field.mask(input_mask, addl_spec);
     // next line to fix an issue affecting android >= 4.x
     field.removeAttr("maxlength");
+    field.attr("type", "tel");
 };
 
 y.getRenderData = function (field) {
