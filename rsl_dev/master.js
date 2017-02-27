@@ -1619,8 +1619,7 @@ $(document).on("initialize", function (e, target, opts) {
             }
         }
         if (json_obj.input_mask && !$(this).hasClass("css_type_date")) {
-            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
-            $(this).find(":input").mask(json_obj.input_mask);
+            y.applyMask($(this).find(":input"), json_obj.input_mask);
         }
     });
 });
@@ -1638,6 +1637,21 @@ $(document).on("change", ".css_reload :input", function (event) {
 });
 
 /*-------------------------------------------------------------Field Functions--------------------------------------------------*/
+y.applyMask = function (field, input_mask, addl_spec) {
+    var container = field && field.parents(".css_edit").first();
+    y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
+    field.mask(input_mask, addl_spec);
+    // next line to fix an issue affecting android >= 4.x
+    field.removeAttr("maxlength");
+    // follows hacks suggested by the author
+    if (container && (
+        container.hasClass("css_type_datetime") ||
+        container.hasClass("css_type_time")
+    )) {
+        field.attr("type", "tel");
+    }
+};
+
 y.getRenderData = function (field) {
     var json_obj = {},
         json_str = field.find("span.css_render_data").text();
@@ -1884,8 +1898,7 @@ $(document).on("initialize", function (event, target, opts) {
         $(this).find(":input").datepicker(dp_settings);
 
         if (json_obj.input_mask && !$(this).hasClass("css_type_date")) {
-            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
-            $(this).find(":input").mask(json_obj.input_mask);
+            y.applyMask($(this).find(":input"), json_obj.input_mask);
         }
     });
 });
@@ -1918,12 +1931,10 @@ $(document).on("initialize", function (event, target, opts) {
         input1.datepicker(dp_settings);
         // An array would be better
         if (json_obj.input_mask1) {
-            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
-            input1.mask(json_obj.input_mask1);
+            y.applyMask(input1, json_obj.input_mask1);
         }
         if (json_obj.input_mask2) {
-            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
-            input2.mask(json_obj.input_mask2);
+            y.applyMask(input2, json_obj.input_mask2);
         }
     });
 });
@@ -1960,12 +1971,12 @@ $(document).on("initialize", function (event, target, opts) {
         nino_date_input.datepicker(dp_settings);
         // // An array would be better
         if (json_obj.date_input_mask) {
-            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
-            nino_date_input.mask(json_obj.date_input_mask);
+            y.applyMask(nino_date_input, json_obj.date_input_mask);
         }
         if (json_obj.ni_input_mask) {
-            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
-            nino_text_input.mask(json_obj.ni_input_mask, {autoclear: false});
+            y.applyMask(nino_text_input, json_obj.ni_input_mask, {
+                autoclear: false,
+            });
         }
         // if (json_obj.input_mask2) {
         //     y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
