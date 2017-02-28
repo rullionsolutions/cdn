@@ -254,3 +254,13 @@ div.css_page_buttons > button	{ margin-right: 10px; }
 		margin-left: 0px !important;
 	}
 }
+
+.radiusfilter2 {
+	margin-right: 4px;
+}
+
+@media (max-width: 439px) 	{
+	.radiusfilter {
+		margin-top: 4px;
+	}
+}
