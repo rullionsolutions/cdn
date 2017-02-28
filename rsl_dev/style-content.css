@@ -244,3 +244,13 @@ div.css_page_buttons > button	{ margin-right: 10px; }
 .navbar .nav > .active > a			{ box-shadow: none; }
 .navbar .nav > .active > a:hover	{ box-shadow: none; }
 .navbar .nav > .active > a:focus	{ box-shadow: none; }
+
+.radiusParent {
+	margin-left: -10px !important;
+}
+
+@media (max-width: 767px) 	{
+	.radiusParent {
+		margin-left: 0px !important;
+	}
+}
