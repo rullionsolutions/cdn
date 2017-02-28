@@ -209,11 +209,12 @@ y.load = function (target, params, opts) {
     y.clearMessages();//clear messages at the beginning of a load
     if (opts.load_mode === "main") {
         y.time_stamps.pre_post = new Date();
+    // use window.top to cover the situation of being inside the iframe - Cand Portal integration
         opts.scroll_top = opts.scroll_top || $(window).scrollTop();
     }
 
 //    target.find(":input").trigger("prepost");//Event to convert input value before post request
-    target.find(":input").each(function() {
+    target.find(":input").each(function () {
         if (!$(this).attr("name")) {
             return;
         }
@@ -239,11 +240,11 @@ y.load = function (target, params, opts) {
 //        data_str += "&" + $(this).attr("id") + "=" + encodeURIComponent($(this).val());
 //    });
     target.find(".css_richtext.css_edit").each(function () {
-        addParam($(this).attr("id"), $(this).children("div").html());
+        addParam(y.getFieldId(this), $(this).children("div").html());
     });
     //If no attributes are ticked - allows reload to function correctly
     target.find(".css_type_attributes.css_edit").each(function () {
-        addParam($(this).attr("id"), "");
+        addParam(y.getFieldId(this), "");
     });
     target.trigger('deactivate', [target, opts]);
 
@@ -433,8 +434,6 @@ $(document).on("initialize", function (e, target, opts) {
         }
         //Set Timestamp
         y.time_stamps.post_render = new Date();
-        //Set scroll
-        $(window).scrollTop(opts.scroll_top);
     }
 });
 
@@ -444,11 +443,12 @@ $(document).on("initialize", function (e, target, opts) {
         input;
 
     //Focus on next input
-    target.find("div.css_edit").each(function() {
+    target.find("div.css_edit").each(function () {
+        var field = $(this).children(":input");
         if ($(this).children(":input").length > 0) {
             if (focus_next_input === true) {
-                focus_next_input = $(this).children(":input");
-            } else if ($(this).children(":input").attr("id") === y.last_focused_input) {
+                focus_next_input = field;
+            } else if (y.getFieldId(field) === y.last_focused_input) {
                 focus_next_input = true;
             }
         }
@@ -468,6 +468,11 @@ $(document).on("initialize", function (e, target, opts) {
         input.focus();
     }
     y.last_key_pressed = null;
+
+    // Set scroll - AFTER setting field focus
+    if (opts.load_mode === "main") {
+        $(window).scrollTop(opts.scroll_top);
+    }
 });
 
 //Load page includes assets
@@ -1670,8 +1675,13 @@ y.fieldFocus = function (field) {
 //        $(field).val("");
 //        $(field).removeClass("css_helper_text");
 //    }
-    y.last_focused_input = $(field).attr("id");
+    y.last_focused_input = y.getFieldId(field);
 };
+
+y.getFieldId = function (field) {
+    return $(field).attr("id") || $(field).attr("name");
+};
+
 
 // Need to re-factor this function!
 y.fieldBlur = function (field) {
@@ -1789,7 +1799,7 @@ y.fieldBlur = function (field) {
                 }
             }
         }
-        if (container.hasClass("css_type_ni_number") && $(field).attr("id") !== "nino_unknown_input") {
+        if (container.hasClass("css_type_ni_number") && y.getFieldId(field) !== "nino_unknown_input") {
             if (container.find("#nino_unknown_input").prop("checked") === false){
                 if (json_obj.regex_ni && !json_obj.regex_ni_label) {
                     json_obj.regex_ni_label = "not valid";
@@ -1802,7 +1812,7 @@ y.fieldBlur = function (field) {
                     }
                 }
             } else {
-                if ($(field).attr("id") !== "nino_date_input") {
+                if (y.getFieldId(field) !== "nino_date_input") {
                     //Validate date sibling
                     if (json_obj.regex_date && !json_obj.regex_date_label) {
                         json_obj.regex_date_label = "not valid";
@@ -1810,7 +1820,7 @@ y.fieldBlur = function (field) {
                     if (json_obj.regex_date) {
                         regex = new RegExp(json_obj.regex_date);
                         [].some.call(siblings, function (sibling) {
-                            if ($(sibling).attr("id") === "nino_date_input" && !regex.exec($(sibling).val())) {
+                            if (y.getFieldId(sibling) === "nino_date_input" && !regex.exec($(sibling).val())) {
                                 addError(json_obj.regex_date_label);
                                 return true;
                             }
@@ -2036,7 +2046,7 @@ $(document).on("initialize", function (event, target, opts) {
             min_length,
             modified = false;
 
-        id         = input_cntrl.attr( "id" );
+        id = y.getFieldId(input_cntrl);
         max_rows   = field.data("render_data").autocompleter_max_rows   || 10;
         min_length = field.data("render_data").autocompleter_min_length || 2;
 
@@ -2130,7 +2140,7 @@ $(document).on("initialize", function (event, target, opts) {
     target.find("div.css_edit.css_type_file").each(function () {
         var field = $(this),
             oInput,
-            control        = field.children(":input"   ).attr("id"),
+            control = y.getFieldId(field.children(":input")),
             existing_id    = field.children("span.val" ).text(),
             existing_title = field.children("span.text").text();
 
