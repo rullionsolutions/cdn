@@ -272,36 +272,40 @@ y.load = function (target, params, opts) {
 
 /*--------------------------------------------------loadSuccess Handler---------------------------------------------------------*/
 $(document).on("loadSuccess", function (e, target, params, opts, data_back) {
-    y.leaving_trans_page = false;
-    y.sessionTimeout.onLoadSuccess(data_back.logged_out, data_back.session);
-    if (data_back.logged_out) {
-        y.expecting_unload = true;
-        if (y.default_guest) {      // If not logged in and skin HTML defines a default guest a/c
-            y.guestLogin(y.default_guest, target, params, opts);
+    var loadSuccessLogic = function (e, target, params, opts, data_back) {
+        y.leaving_trans_page = false;
+        y.sessionTimeout.onLoadSuccess(data_back.logged_out, data_back.session);
+        if (data_back.logged_out) {
+            y.expecting_unload = true;
+            if (y.default_guest) {      // If not logged in and skin HTML defines a default guest a/c
+                y.guestLogin(y.default_guest, target, params, opts);
+                loadSuccessLogic(e, target, params, opts, data_back);
+            } else {
+                y.renderLogin(target, opts);
+            }
+        } else if (data_back.session.is_guest && data_back.session.user_id !== y.default_guest) {
+            y.logout();         // invalidates current session then redirects
+        } else if (data_back.page.skin && data_back.page.skin !== y.skin && opts.load_mode !== "modal") {
+            window.location = y.getRedirectURL(data_back, y.simple_url);
         } else {
-            y.renderLogin(target, opts);
+            y.logged_in = true;
+            if (data_back.session.is_guest) {
+                $(".css_not_logged_in").removeClass("css_not_logged_in");
+            } else {
+                $(".css_logged_in").removeClass(    "css_logged_in");
+            }
+            y.expecting_unload = false;
+    
+            if (opts.load_mode === "main") {
+                y.loadSuccessMainPage(target, params, opts, data_back);
+            } else if (opts.load_mode === "modal") {
+                y.loadSuccessModal   (target, params, opts, data_back);
+            } else {
+                y.addMessage("Unrecognized load_mode: " + opts.load_mode, 'E');
+            }
         }
-    } else if (data_back.session.is_guest && data_back.session.user_id !== y.default_guest) {
-        y.logout();         // invalidates current session then redirects
-    } else if (data_back.page.skin && data_back.page.skin !== y.skin && opts.load_mode !== "modal") {
-        window.location = y.getRedirectURL(data_back, y.simple_url);
-    } else {
-        y.logged_in = true;
-        if (data_back.session.is_guest) {
-            $(".css_not_logged_in").removeClass("css_not_logged_in");
-        } else {
-            $(    ".css_logged_in").removeClass(    "css_logged_in");
-        }
-        y.expecting_unload = false;
-
-        if (opts.load_mode === "main") {
-            y.loadSuccessMainPage(target, params, opts, data_back);
-        } else if (opts.load_mode === "modal") {
-            y.loadSuccessModal   (target, params, opts, data_back);
-        } else {
-            y.addMessage("Unrecognized load_mode: " + opts.load_mode, 'E');
-        }
-    }
+    };
+    loadSuccessLogic(e, target, params, opts, data_back);
 });
 
 y.loadSuccessMainPage = function (target, params, opts, data_back) {
