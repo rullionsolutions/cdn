@@ -1787,7 +1787,7 @@ y.fieldError = function (container, error) {
 /*-------------------------------------------------------Date Field-------------------------------------------------------------*/
 
 $(document).on("initialize", function (event, target, opts) {
-    target.find("div.css_edit.css_type_date").each(function () {
+    target.find("div.css_edit.css_type_date, div.css_edit.css_type_birth_date").each(function () {
         var dp_settings,
             json_obj = y.getRenderData($(this));
         y.checkStyle( "/cdn/jquery-ui-1.10.2.custom/css/smoothness/jquery-ui-1.10.2.custom.css");
@@ -1799,6 +1799,9 @@ $(document).on("initialize", function (event, target, opts) {
             dateFormat: "dd/mm/y",          // 2-digit year
             shortYearCutoff: +50
         };
+        if ($(this).hasClass("css_type_birth_date")) {
+            dp_settings.dateFormat = "mm/dd/yy";
+        }
         if (json_obj.min) {
             dp_settings.minDate = new Date(json_obj.min);
         }
