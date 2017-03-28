@@ -1,0 +1,11 @@
+@media print {
+    #css_modal { display: none; }
+    #css_top_bar { display: none; }
+    *[class^="icon-"] { display: none; }
+    body {
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-size: 10pt;
+        line-height: 20px;
+        color: #535e68;
+    }
+}

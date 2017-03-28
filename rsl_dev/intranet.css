@@ -1,0 +1,6 @@
+@media print {
+    .css_job_block {
+    	border-radius: 0px;
+    	box-shadow: none;
+    }
+}
