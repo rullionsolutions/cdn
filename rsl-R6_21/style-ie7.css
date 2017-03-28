@@ -1,0 +1,36 @@
+
+#myr-top-strip-icon img			{ top: -2px; left: -2px; }
+#myr-top-strip-menu  			{ top: 13px; }
+#myr-top-strip-menu > ul ul li	{ display: inline; width: 100%; }
+.myr-button						{ padding: 0 }
+
+td.FLD_Textarea					{ width: 800px; }
+a 		{ color: black; }		/* 'inherit' not recognised by IE7 */
+
+/* Fix for Jumpy Spiders! (the dialog box issue in IE7) */
+.ui-dialog { position: absolute; overflow: hidden }
+
+/*IE7 does not like default btn-group styling*/
+.btn-group > .btn-small + .dropdown-toggle { margin-top: -3px; padding-top: 4px; padding-bottom: 3px; }
+
+/*Page links out of alignment*/
+div.css_page_links :first-child.btn { margin-left: 0.3em; }
+
+/*Misaligned footer*/
+/*div#css_footer_copyright { float: left; }*/
+footer > div 					{ *display: inline; zoom: 1; }
+
+div.css_page_buttons { margin-top: 20px;  }
+
+.row-fluid [class*='span'] { min-height: 0; }
+/* select { height: 25px; line-height: 25px; } */
+
+ul.qq-upload-list { margin-top: 5px; margin-left: 0px; }
+/* .qq-uploader 					{ position : static; top : 10px; left : 10px; } */
+.qq-upload-button				{ position : static !important; height: 20px; }
+.qq-upload-button >	span		{ padding-right : 10px; }
+.qq-upload-button >	input		{ position : static !important; font-size : 25px !important; width: 50px; 
+								  margin-left : -15px !important; margin-top : -32px !important; }
+#css_login .css_login_fld { *display: inline; zoom: 1; }
+/*Right align fields don't really work in IE7*/
+.css_right_align_numbers td.css_align_right input { text-align: left; }
