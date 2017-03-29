@@ -18,6 +18,7 @@ function addAdvertToFavourites(rqmt_splr) {
                 if (data_back && Object.hasOwnProperty.call(data_back, "msg")) {
                     y.clearMessages();
                     y.addMessage(data_back.msg.text, data_back.msg.type);
+                    $(window).scrollTop(0);
                 }
             } catch (e) {
                 y.clearMessages();
