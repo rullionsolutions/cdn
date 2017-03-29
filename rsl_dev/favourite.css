@@ -1,9 +1,19 @@
 .favourite_icon {
-	position: absolute;
-	top: 35px;
-	right: 20px;
+    position: absolute;
+    top: 35px;
+    right: 20px;
 }
 
-.css_job_block {
-	position: relative;
+#main > .favourite_icon {
+    top: 15px;
+}
+
+@media(max-width: 690px) {
+     #main > .favourite_icon {
+        top: 5px;
+    }
+}
+
+.css_job_block, #main {
+    position: relative;
 }

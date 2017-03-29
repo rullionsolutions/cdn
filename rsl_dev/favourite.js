@@ -1,12 +1,12 @@
 /* global $, y, console */
 
-function addAdvertToFavourites(job_id) {
-    console.log(job_id);
+function addAdvertToFavourites(rqmt_splr) {
+    console.log(rqmt_splr);
     $.ajax({
         url: y.getAjaxURL("jsp/main.jsp", "mode=addFavourite"),
         type: "POST",
         data: {
-            job_id: job_id,
+            rqmt_splr: rqmt_splr,
         },
         timeout: (y.page && y.page.browser_timeout) || y.server_timeout,
         beforeSend: function (xhr) {        // IOS6 fix
@@ -32,9 +32,8 @@ function addAdvertToFavourites(job_id) {
 (function () {
     $(".favourite_icon").each(function () {
         $(this).click(function (event) {
-            var job_id = $(this).attr("job_id");
             event.stopPropagation();
-            addAdvertToFavourites(job_id);
+            addAdvertToFavourites($(this).attr("rqmt_splr"));
         });
     });
 }());
