@@ -1,0 +1,56 @@
+#css_login_block_left > * {
+    margin: 10px 0px 0px 0px;
+    vertical-align: top;
+}
+
+.css_job_block {
+    border: 0;
+    border-radius: 0 0 20px 0;
+    box-shadow: 2px 2px 5px #999999;
+    padding: 17px 20px 17px 20px;
+    margin: 20px 0 20px 0;
+    background: white;
+    cursor: pointer;
+    behavior: url(../..cdn/PIE-1.0.0/PIE.htc);
+}
+.css_job_block:hover { background: #f6f6f6; }
+.css_job_buttons {
+    float: right;
+    position: relative;
+    top: -5px;
+}
+.css_job_buttons > * { margin-right: 5px; }
+.css_job_info { text-align: right; }
+.css_job_info > * { margin-right: 5px; }
+.css_job_info > .css_disp {
+    font-weight: bold;
+    margin-right: 20px;
+}
+body { padding-top: 20px; }
+#welcome_dashboard { font-size:15pt; }
+div.daily_agent_btn > * {
+    margin: 0 0 10px 10px;
+}
+.css_filter_oper_disp { display:none; }
+ #css_top_bar .btn {
+    margin-right: 4px;
+}
+#css_page_header_title, h2 { font-size: 18.5pt; }
+.task_count {
+    font-size: 10px;
+    position:absolute;
+    right: 5px;
+    top:-5px;
+    background-color:red
+}
+.task_small {
+    margin-left:5px;
+    position:relative;
+    top:0px;
+}
+.css_section_DashboardSection > h2 > i { margin-right:10px }
+.alert_li {
+    height:31px;
+    padding-top:2px;
+    padding-bottom: 2px;
+}
