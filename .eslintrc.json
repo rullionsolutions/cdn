@@ -36,6 +36,8 @@
             "ignoreComments": false,
             "ignoreStrings": true,
             "ignoreTemplateLiterals": true
-        }]
+        }],
+        "linebreak-style": 0,
+        "operator-linebreak": ["warn", "before"]
     }
 }
