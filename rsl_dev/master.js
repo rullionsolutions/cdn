@@ -2029,6 +2029,17 @@ $(document).on("initialize", function (event, target, opts) {
 
 /*----------------------------------------------Reference/Combo (Autocompleter)-------------------------------------------------*/
 
+y.afterBlur = function (modified, field, field_value, input_cntrl, prev_value, map) {
+    console.log("y.afterBlur");
+    if (modified) {
+        modified = false;
+        if (field.hasClass("css_reload")) {
+            y.loadLocal(field, { page_button: field_value.attr("name") });
+        }
+    }
+    return modified;
+};
+
 $(document).on("initialize", function (event, target, opts) {
     target.find("div.css_edit.css_type_reference").each(function () {
         if ($(this).children("input").length === 0) {
@@ -2041,6 +2052,7 @@ $(document).on("initialize", function (event, target, opts) {
             field_value  = field.children("input[type='hidden']"),
             input_cntrl  = field.children("input[type='text']"),
             input_value  = input_cntrl.val(),
+            prev_value = input_value,
             combo        = field.hasClass("css_combo"),
             max_rows,
             min_length,
@@ -2070,16 +2082,10 @@ $(document).on("initialize", function (event, target, opts) {
                     input_value = "";
                 }
             }
-
         }
 
         function afterBlur() {
-            if (modified) {
-                modified = false;
-                if (field.hasClass("css_reload")) {
-                    y.loadLocal(field, { page_button: field_value.attr("name") });
-                }
-            }
+            modified = y.afterBlur(modified, field, field_value, input_cntrl, prev_value, map);
         }
 
         input_cntrl.typeahead({
