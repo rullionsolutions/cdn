@@ -2706,9 +2706,8 @@ y.bulk.mouseoverRow = function(row) {
 y.bulk.getURLParams = function (btn_elem) {
     var table = $(btn_elem).parents("table");
     var out = "&selected_keys=" + JSON.stringify(table.data("bulk_selection_key_array") || []);
-    table.data("bulk_selection_key_array", []);
     return out;
-}
+};
 
 
 
