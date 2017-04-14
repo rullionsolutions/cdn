@@ -16,6 +16,37 @@
  * loadError   - main.jsp?mode=post returns with a failure
  */
 
+if (!Array.prototype.some) {
+    Array.prototype.some = function (fun /*, thisArg*/) {
+        "use strict";
+
+        var t;
+        var len;
+        var thisArg;
+        var i;
+
+        if (this == null) {
+            throw new TypeError("Array.prototype.some called on null or undefined");
+        }
+
+        if (typeof fun !== "function") {
+            throw new TypeError();
+        }
+
+        t = Object(this);
+        len = t.length >>> 0;
+
+        thisArg = arguments.length >= 2 ? arguments[1] : void 0;
+        for (i = 0; i < len; i += 1) {
+            if (i in t && fun.call(thisArg, t[i], i, t)) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+}
+
 var y = {},
     qq,
     Viz,
@@ -158,18 +189,17 @@ y.load = function (target, params, opts) {
             return;
         }
         if ($(this).closest(".css_type_ni_number").length !== 0){
-
-            if ($(this).attr("type") === "checkbox" && $(this).attr("checked") !== "checked") {
+            if ($(this).attr("type") === "checkbox" && $(this).prop("checked") === false) {
                 $(this).val("off");
             }
 
             addParamIncludingBlank($(this).attr("name"), $(this).val());
             return;
         }
-        if ($(this).attr("type") === "checkbox" && $(this).attr("checked") !== "checked") {
+        if ($(this).attr("type") === "checkbox" && $(this).prop("checked") === false) {
             return;
         }
-        if ($(this).attr("type") === "radio"    && $(this).attr("checked") !== "checked") {
+        if ($(this).attr("type") === "radio"    && $(this).prop("checked") === false) {
             return;
         }
         addParam($(this).attr("name"), $(this).val());
@@ -725,6 +755,9 @@ y.getRedirectURL = function (data_back, query_string) {
         query_string = "";
     }
     if (query_string.indexOf(".html") > -1) {
+        return query_string;
+    }
+    if (query_string.indexOf("mailto") === 0) {
         return query_string;
     }
     if (query_string && query_string.indexOf("?") !== 0) {
@@ -1395,10 +1428,10 @@ $(document).on("click", ".css_cmd", function (event) {
                 if (!$(this).attr("name")) {
                     return;
                 }
-                if ($(this).attr("type") === "checkbox" && $(this).attr("checked") !== "checked") {
+                if ($(this).attr("type") === "checkbox" && $(this).prop("checked") === false) {
                     return;
                 }
-                if ($(this).attr("type") === "radio"    && $(this).attr("checked") !== "checked") {
+                if ($(this).attr("type") === "radio"    && $(this).prop("checked") === false) {
                     return;
                 }
                 addParam($(this).attr("name"), $(this).val());
@@ -1416,7 +1449,7 @@ $(document).on("keyup", function (event) {
         button;
     y.last_key_pressed = event.keyCode;
     if ((event.keyCode === 13) && node && ($(node).attr("type") === "text" || $(node).attr("type") === "password"))  {
-        button = $(this).parents("form").find(".css_button_main");
+        button = $(node).closest(".css_section").find(".css_button_main");
         if (button.length === 0) {
             button = $(".css_button_main");
         }
@@ -1510,27 +1543,22 @@ $(document).on("initialize", function (e, target, opts) {
             }
         }
         if (json_obj.input_mask && !$(this).hasClass("css_type_date")) {
-            y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             $(this).find(":input").mask(json_obj.input_mask);
         }
     });
 });
 
 /*---------------------------------------------Reloadable Field Handlers--------------------------------------------------------*/
-$(document).on("change", ".css_reload > :input", function (event) {
+$(document).on("change", ".css_reload :input", function (event) {
 //    var target = y.getTarget($(this));
     //CL - Try to do this with the selector on the .change call if possible
     if (!($(this).parent().hasClass("css_type_reference") && $(this).parent().children("input").length > 1)) {
         y.last_focused_input = $(this).attr("name");
-        y.loadLocal($(this), { page_button: $(this).attr("name") });
+        y.loadLocal($(this), {
+            page_button: $(this).attr("name")
+        });
     }
-});
-
-// CL - Allows attributes field to trigger a reload
-$(document).on("change", ".css_reload > span > span.css_attr_item > :input", function (event) {
-    y.last_focused_input = $(this).attr("name");
-    y.loadLocal($(this), { page_button: $(this).attr("name") });
-        //Could set last focused input here to avoid focus related scrolling weirdness?
 });
 
 /*-------------------------------------------------------------Field Functions--------------------------------------------------*/
@@ -1640,6 +1668,7 @@ y.fieldBlur = function (field) {
         }
 
         if (container.hasClass("css_type_number")) {
+            field_val = field_val.replace(/,/g, "");
             valid = !isNaN(field_val);
             number = parseFloat(field_val, 10);
             if (!valid) {
@@ -1671,7 +1700,7 @@ y.fieldBlur = function (field) {
             }
         }
         if (container.hasClass("css_type_ni_number") && $(field).attr("id") !== "nino_unknown_input") {
-            if (container.find("#nino_unknown_input").attr("checked") === undefined){
+            if (container.find("#nino_unknown_input").prop("checked") === false){
                 if (json_obj.regex_ni && !json_obj.regex_ni_label) {
                     json_obj.regex_ni_label = "not valid";
                 }
@@ -1684,6 +1713,22 @@ y.fieldBlur = function (field) {
                 }
             } else {
                 if ($(field).attr("id") !== "nino_date_input") {
+                    //Validate date sibling
+                    if (json_obj.regex_date && !json_obj.regex_date_label) {
+                        json_obj.regex_date_label = "not valid";
+                    }
+                    if (json_obj.regex_date) {
+                        regex = new RegExp(json_obj.regex_date);
+                        [].some.call(siblings, function (sibling) {
+                            if ($(sibling).attr("id") === "nino_date_input" && !regex.exec($(sibling).val())) {
+                                addError(json_obj.regex_date_label);
+                                return true;
+                            }
+                            return false;
+                        });
+                    }
+
+                    //Validate self
                     if (json_obj.regex_gender && !json_obj.regex_gender_label) {
                         json_obj.regex_gender_label = "not valid";
                     }
@@ -1692,6 +1737,17 @@ y.fieldBlur = function (field) {
                         valid = regex.exec(field_val);
                         if (!valid) {
                             addError(json_obj.regex_gender_label);
+                        }
+                    }
+                } else {
+                    if (json_obj.regex_date && !json_obj.regex_date_label) {
+                        json_obj.regex_date_label = "not valid";
+                    }
+                    if (json_obj.regex_date) {
+                        regex = new RegExp(json_obj.regex_date);
+                        valid = regex.exec(field_val);
+                        if (!valid) {
+                            addError(json_obj.regex_date_label);
                         }
                     }
                 }
@@ -1731,7 +1787,7 @@ y.fieldError = function (container, error) {
 /*-------------------------------------------------------Date Field-------------------------------------------------------------*/
 
 $(document).on("initialize", function (event, target, opts) {
-    target.find("div.css_edit.css_type_date").each(function () {
+    target.find("div.css_edit.css_type_date, div.css_edit.css_type_birth_date").each(function () {
         var dp_settings,
             json_obj = y.getRenderData($(this));
         y.checkStyle( "/cdn/jquery-ui-1.10.2.custom/css/smoothness/jquery-ui-1.10.2.custom.css");
@@ -1743,6 +1799,9 @@ $(document).on("initialize", function (event, target, opts) {
             dateFormat: "dd/mm/y",          // 2-digit year
             shortYearCutoff: +50
         };
+        if ($(this).hasClass("css_type_birth_date")) {
+            dp_settings.dateFormat = "mm/dd/yy";
+        }
         if (json_obj.min) {
             dp_settings.minDate = new Date(json_obj.min);
         }
@@ -1751,8 +1810,8 @@ $(document).on("initialize", function (event, target, opts) {
         }
         $(this).find(":input").datepicker(dp_settings);
 
-        if (json_obj.input_mask) {
-            y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+        if (json_obj.input_mask && !$(this).hasClass("css_type_date")) {
+            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             $(this).find(":input").mask(json_obj.input_mask);
         }
     });
@@ -1786,11 +1845,11 @@ $(document).on("initialize", function (event, target, opts) {
         input1.datepicker(dp_settings);
         // An array would be better
         if (json_obj.input_mask1) {
-            y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             input1.mask(json_obj.input_mask1);
         }
         if (json_obj.input_mask2) {
-            y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             input2.mask(json_obj.input_mask2);
         }
     });
@@ -1801,6 +1860,7 @@ $(document).on("initialize", function (event, target, opts) {
     target.find("div.css_edit.css_type_ni_number").each(function () {
         var field = $(this),
             json_obj = y.getRenderData(field),
+            nino_text_input = field.find("#nino_text_input"),
             nino_date_input = field.find("#nino_date_input"),
             //input2 = field.find(":input:eq(1)"),
             dp_settings;
@@ -1827,11 +1887,15 @@ $(document).on("initialize", function (event, target, opts) {
         nino_date_input.datepicker(dp_settings);
         // // An array would be better
         if (json_obj.date_input_mask) {
-            y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
             nino_date_input.mask(json_obj.date_input_mask);
         }
+        if (json_obj.ni_input_mask) {
+            y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
+            nino_text_input.mask(json_obj.ni_input_mask, {autoclear: false});
+        }
         // if (json_obj.input_mask2) {
-        //     y.checkScript("/cdn/jquery.maskedinput/jquery.maskedinput.min.js");
+        //     y.checkScript("/cdn/jquery.maskedinput1.4.1/jquery.maskedinput.min.js");
         //     input2.mask(json_obj.input_mask2);
         // }
     });
@@ -1961,6 +2025,9 @@ $(document).on("initialize", function (event, target, opts) {
                 return item;
             }
         });
+        if ($(input_cntrl).is(":focus")) {
+            input_cntrl.typeahead().focus();
+        }
         input_cntrl.focus(function (event2) {
             input_value = input_cntrl.val();
         });
@@ -2082,10 +2149,10 @@ $(document).on("initialize", function (event, target, opts) {
     //            config: [ 'img' ], // enable the plugin
     //            config: { ui: { reset: true, resize: false, crop: false, resizeable: false } }
     //        };
-            y.checkStyle( "/cdn/alohaeditor-0.25.2/aloha/css/aloha.css");
-    //      y.checkScript("/cdn/alohaeditor-0.25.2/aloha/lib/vendor/jquery-1.7.2.js");
-            y.checkScript("/cdn/alohaeditor-0.25.2/aloha/lib/require.js");
-            y.checkScript("/cdn/alohaeditor-0.25.2/aloha/lib/aloha-full.min.js");
+            y.checkStyle( "/cdn/alohaeditor-1.2.1/aloha/css/aloha.css");
+    //      y.checkScript("/cdn/alohaeditor-v0.25.2/aloha/lib/vendor/jquery-1.7.2.js");
+            y.checkScript("/cdn/alohaeditor-1.2.1/aloha/lib/require.js");
+            y.checkScript("/cdn/alohaeditor-1.2.1/aloha/lib/aloha-full.min.js");
             y.aloha_activated = true;
         }
         Aloha.ready(function() {

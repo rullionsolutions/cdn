@@ -1,0 +1,100 @@
+
+/* General TB Overrides (TB = twitter-bootstrap) */
+h1							{ font-size: 16pt; line-height: 18pt; }
+h2							{ font-size: 14pt; line-height: 16pt; }
+h3							{ font-size: 12pt; }
+h4							{ font-size: 11pt; }
+p							{ line-height: 13pt; }
+p.lead						{ font-size: 11pt; }
+
+.navbar-fixed-top {
+	position: static;
+	margin-bottom: 9px;
+}
+ul.narrow > li > a {
+	white-space: normal;
+}
+ul.narrow:before, ul.narrow:after {
+	display:none !important;
+}
+#css_body					{ margin-bottom: 50px; }
+.css_body_tabs_above		{ border-width: 0px 1px 1px 1px; border-style: solid; border-color: #DDDDDD; padding: 20px; }
+
+div#css_opt_navbar > div.navbar-inner	{
+								padding: 10px 20px 0 20px; border: 0; filter: none; /* override MSIE setting in TB */
+								box-shadow: none; background-image: none; border-bottom: 1px solid #E3E3E3; }
+div.navbar ul.nav-pills > li > a		{ line-height: 18px; text-shadow: none; font-weight: bold; padding: 5px 12px; border-radius: 10px; }
+div#css_menu_replace		{ display: inline-block; }
+div#css_menu_replace li.dropdown-submenu > a > i.icon-ok	{ margin-right: 10px; }
+div#css_menu_replace div.css_menu_panel		{ width: 200px }
+div#css_menu_replace div.css_menu_tasks		{ width: 200px }
+@media (min-width: 768px) 	{
+	div#css_menu_replace div.css_cntr_tasks		{ width: 400px }
+	div#css_menu_replace div.css_menu_panel		{ float: left  }
+	div#css_menu_replace div.css_menu_tasks		{ float: right }
+}
+
+ul.nav-list							{ padding: 0; margin: 0; width: 100% }
+div.navbar .nav-list li.nav-header	{ padding: 5px 5px 5px 10px; margin: 0 }
+div.navbar .nav-list li				{ padding: 2px 5px 2px 10px; float: none; }
+div.navbar .nav-list li:hover		{ background-color: #f2f2f2; }
+div.navbar .nav-list li.nav-header:hover		{ background-color: inherit; }
+div.navbar .nav-list li > a			{ padding: 0; margin: 0; font-weight: normal; font-size: 9pt; }
+div.css_menu_icon					{ margin: 2px 0px 0px 10px }
+li.css_menu_icon					{ padding: 3px 20px }
+.navbar .pull-right>li>.dropdown-menu .dropdown-menu, .navbar .nav>li>.dropdown-menu.pull-right .dropdown-menu.pull-left {
+	left: 100%; right: auto; margin-top: -6px; margin-left: -1px; margin-right: 0;
+}
+.navbar .pull-right>li>.dropdown-menu .dropdown-menu, .navbar .nav>li>.dropdown-menu .dropdown-menu.pull-right {
+    left: auto; right: 100%; margin-top: -6px; margin-left: -1px; margin-right: 0;
+}
+.dropdown-menu>li.css_task_all>a { font-weight: bold; text-align: center; text-decoration: underline; }
+
+div.css_test				{ background-image: url(/cdn/icons/test-env-bg.png); background-repeat: repeat-x; }
+
+/* Left / Top Bars */
+#top_bar					{ margin-top: 40px; }
+#top_bar .btn				{ margin: 0px 4px 4px 0px; }
+#css_top_bar .btn			{ margin-bottom: 5px; margin-right: 4px; }
+
+div#css_top_bar > div#css_login		{ width: auto; min-width: 220px; max-width: 450px; display: block; margin-left: auto; margin-right: auto; }
+div#css_logout_button		{ margin-top: 2px; }
+#css_login .css_login_fld 	{ display: inline-block; }
+.css_login_fld label 		{ font-weight: bold; }
+#css_nav_icons				{ position: relative; text-align: right; }
+
+#css_left_bar > .css_page_links	> a	{ text-align: right; padding-right: 10px; }
+
+div.css_main_logo			{
+								border-radius: 10px; text-align: center; padding: 10px; margin-bottom: 20px;
+								min-width: 130px; /*box-shadow: 0 3px 5px #B0B0B0;*/
+								behavior: url(../PIE-1.0.0/PIE.htc);
+							}
+div.css_main_logo > a		{ display: inline-block; height: 60px; width: 130px; overflow: hidden; margin-left: 0px; }
+
+#css_page_header_title > b	{ vertical-align: middle; }
+
+/* Footer */
+footer						{ position: fixed; bottom: 0; width: 100%; margin: 0; font-size: 8pt; font-weight: bold; border-top: 1px solid #E3E3E3; z-index: 10; }
+footer > div				{ display: inline-block; width: 33%; }
+footer > div > div			{ padding: 5px; }
+footer > div > div#css_footer_copyright		{ text-align: left;   padding-left: 20px; }
+footer > div > div#css_privacy_msg			{ text-align: center; }
+footer > div > div#css_footer_datetime		{ text-align: right;  padding-right: 20px; }
+
+
+@media (max-width: 480px) {
+	div#css_opt_navbar > div.navbar-inner	{
+		padding: 5px;
+	}
+}
+
+// Outlining
+/*
+#css_root	{ border: 1px solid red; }
+#css_header	{ border: 1px solid blue; }
+#css_menu_block	{ border: 1px solid brown; }
+#css_ctrl_strip	{ border: 1px solid green; }
+#css_page_strip	{ border: 1px solid orange; }
+#css_footer	{ border: 1px solid green; }
+*/

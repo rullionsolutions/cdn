@@ -1,0 +1,7 @@
+/*Printer Friendly View Stylesheet*/
+
+html, body, p, div, img, dl, dd, dt, form, table, td, tr {
+	margin: 0; padding: 0; border: 0; border-collapse: collapse; border-spacing: 0; }
+body		{ width: 650px; font-family: Arial; background-color: white; font-size: 9pt; padding: 10px; }
+
+p			{ margin-bottom: 10px; }

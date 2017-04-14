@@ -1,0 +1,76 @@
+/*Printer Friendly View Stylesheet*/
+
+html, body, p, div, img, dl, dd, dt, form, table, td, tr {
+	margin: 0; padding: 0; border: 0; border-collapse: collapse; border-spacing: 0; }
+body	{ width: 650px; font-family: Arial; background-color: white; font-size: 9pt; margin-top: 30px; }
+
+img		{ vertical-align: middle; border: 0; margin: 0; }
+th		{ vertical-align: top; margin: 0; border: 0; padding: 2px 8px 2px 2px; text-align: left; font-size: 9pt; }
+tr		{ height: 24px; }
+td		{ vertical-align: top; margin: 0; border: 0; padding: 2px 8px 2px 2px; text-align: left; font-size: 9pt; }
+h1		{ font-size: 16px; }
+h2		{ font-size: 14px; }
+h3		{ font-size: 12px; }
+h4		{ font-size: 11px; }
+div#css_page_print		{ font-size: 9pt; }
+div.css_section			{ margin: 12px 0px 48px 0px; }
+.css_hide				{ display: none; }
+
+.css_type_horizbuttons > label	{ font-weight: normal; color: gray; }
+.css_type_horizbuttons > input	{ margin-left: 8px; }
+.css_right_align_numbers th.css_type_number		{ text-align: right; }
+.css_right_align_numbers td.css_type_number		{ text-align: right; }
+
+.css_type_textarea	{ /* font-weight: normal; */ /* to work inside tables */ white-space: pre-wrap; /* css-3 */
+		white-space: -moz-pre-wrap; /* Mozilla, since 1999 */  white-space: -pre-wrap;  /* Opera 4-6 */
+		white-space: -o-pre-wrap;   /* Opera 7 */              word-wrap: break-word;   /* Internet Explorer 5.5+ */  }
+
+div.css_section_text	{ margin: 8px 8px 8px 8px; }
+
+table.css_list			{ width: 100%; }
+table.css_list th		{ border: 1px solid #aaa; }
+table.css_list td		{ border: 1px solid #aaa; }
+
+.css_search_filters		{ padding: 4px; }
+.css_search_add_filter	{ padding: 4px 4px 12px 4px; }
+
+.css_list_additional_row_label	{ text-align: right; }
+
+/* Display Sections */
+.css_disp				{ display: inline-block; margin-left: 10px; font-weight: bold; }
+.css_edit				{ display: inline-block; margin-left: 10px; font-weight: bold; }
+.css_label				{ display: inline-block; min-width: 15%; }
+
+/* FormFlex Sections */
+.css_section_FormFlex span.css_disp	{ margin-left: 10px; font-weight: bold; }
+.css_section_FormFlex td.css_label { min-width: 15%; }
+.css_section_FormFlex td.css_field	{ min-width: 25%; font-weight: bold; }
+
+
+.css_section_Tiles > div > span	{ display: inline-block; padding: 4px; border: 1px solid #a47606; margin: 4px;
+									background-color: #a47606; color: #d2b162; font-size: small; text-decoration: none; }
+.css_section_Tiles > div > div	{ clear: left; }
+
+tr.css_row_total 		{ font-weight: bold; }
+tr.css_row_hidden		{ display: none; }
+td.css_list_footer		{ height: 18px; }
+td.css_col_control		{ background-color: #d9d9d9; padding: 2px; width: 16px; }
+/* span.css_list_add > img		{ width: 20px; } */
+span.css_list_control	{ width: 40px; display: inline-block; }
+span.css_list_rowcount	{ width: 160px; display: inline-block; font-size: x-small; text-align: center; }
+div.css_list_choose_cols	{ margin: 2px; padding: 4px; font-size: smaller; }
+span.css_list_col_shown	{ margin: 2px; padding: 2px; border: 1px solid black; display: inline-block; background-color: #eee; }
+span.css_list_col_hidden	{ margin: 2px; padding: 2px; border: 1px solid black; display: inline-block; background-color: #ddd; }
+
+div.css_form_footer		{ margin: 2px; padding: 4px; font-size: smaller; }
+
+.css_msg_I				{ font-weight: bold; color: green; }
+.css_msg_W				{ font-weight: bold; color: orange; }
+.css_msg_E				{ font-weight: bold; color: red; }
+.css_field_errors		{ font-weight: bold; color: red; border: 1px #a47606 solid; padding: 3px; font-size: smaller;
+							position: absolute; cursor:pointer; display:inline-block; margin-left: 3px; background-color: white;
+							border-radius:5px; -webkit-border-radius:5px; -moz-border-radius:5px;
+							box-shadow: 3px 3px 5px rgba(176,176,176, 1);
+							-webkit-box-shadow: 3px 3px 5px rgba(176,176,176, 1);
+							-moz-box-shadow: 3px 3px 5px rgba(176,176,176, 1); }
+

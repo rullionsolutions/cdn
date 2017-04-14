@@ -1,0 +1,28 @@
+
+/* Job search page results */
+.css_job_block > span > div.css_share_links			{ border-top-left-radius: 4px; float:right; margin-top: 5px; }
+.css_job_block > span > div.css_share_links > a		{ width:32px; height: 25px; padding:0px; border: none; 		 }
+.css_job_block > span > div.css_share_links > a.FB	{ background: url('facebook-32.png') no-repeat; 			 }
+.css_job_block > span > div.css_share_links > a.TW	{ background: url('twitter-32.png' ) no-repeat; 			 }
+.css_job_block > span > div.css_share_links > a.LI	{ background: url('linkedin-32.png') no-repeat; 			 }
+.css_job_block > span > div.css_share_links > a.EM	{ background: url('mail-25.png'    ) no-repeat; 			 }
+
+
+/* phone-visible */
+#css_top_bar > span > div.css_share_links			{ float:right; display:block; border-top-left-radius: 4px; text-align:right;margin-top: 5px;border: 1px solid rgb(179, 179, 179);border-radius: 4px;padding:3px; }
+#css_top_bar > span > div.css_share_links:empty		{ display:none; }
+#css_top_bar > span > div.css_share_links > a		{ width:32px; height: 25px; padding:0px; border: none; 		 }
+#css_top_bar > span > div.css_share_links > a.FB	{ background: url('facebook-32.png') no-repeat; 			 }
+#css_top_bar > span > div.css_share_links > a.TW	{ background: url('twitter-32.png' ) no-repeat; 			 }
+#css_top_bar > span > div.css_share_links > a.LI	{ background: url('linkedin-32.png') no-repeat; 			 }
+#css_top_bar > span > div.css_share_links > a.EM	{ background: url('mail-25.png'    ) no-repeat; 			 }
+
+/* hidden-phone */
+#css_left_bar > div.css_share_links			{ display:block; border-top-left-radius: 4px; text-align:right;margin-top: 5px;border: 1px solid rgb(179, 179, 179);border-radius: 4px;padding:3px;}
+#css_left_bar > div.css_share_links:empty	{ display:none; }
+#css_left_bar > div.css_share_links > p		{ text-align:left;display:inline;ertical-align:middle; height:100%; }
+#css_left_bar > div.css_share_links > a		{ width:32px; height: 25px; padding:0px; border: none;margin:1px; 		 }
+#css_left_bar > div.css_share_links > a.FB	{ background: url('facebook-32.png') no-repeat; 			 }
+#css_left_bar > div.css_share_links > a.TW	{ background: url('twitter-32.png' ) no-repeat; 			 }
+#css_left_bar > div.css_share_links > a.LI	{ background: url('linkedin-32.png') no-repeat; 			 }
+#css_left_bar > div.css_share_links > a.EM	{ background: url('mail-25.png'    ) no-repeat; 			 }
