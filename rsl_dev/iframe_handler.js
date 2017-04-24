@@ -66,7 +66,7 @@ var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
                 $(window).scrollTop(0); //scroll to the top on new page
             }
         }
-        if (p.title) {
+        if (p.title !== "undefined" && typeof p.title !== "undefined") {
             document.title = p.title;
         }
     }
