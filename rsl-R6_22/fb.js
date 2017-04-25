@@ -71,6 +71,7 @@ function statusChangeCallback(response) {
     if (response.status === "connected") {
         checkRequest(response);
     } else {
+        y.clearMessages();
         y.addMessage("Failed to login to Facebook", "E");
     }
 }
