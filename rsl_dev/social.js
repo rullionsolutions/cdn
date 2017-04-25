@@ -1,22 +1,3 @@
-if (y.page.social_links) {
-    $(".css_share_links").empty();
-    $("div#css_left_bar .css_share_links").append("<p>Share to...  </p>");
-    $("div#css_top_bar .css_share_links").append("<p>Share to...  </p>");
-    for (i = 0; y.page.social_links && i < y.page.social_links.length; i += 1) {
-        link = y.page.social_links[i];
-        addl = "href='" + link.url + "'" + (link.target ? " target='" + link.target + "'" : "");
-        
-        addl += ">"+/* + link.label + " " + y.arrow_entity + */"</a>";
-        classes = "btn "+link.target;
-        if (link.open_in_modal === true) {
-            classes += " css_open_in_modal";
-        }
-        
-        $("div#css_left_bar .css_share_links").append("<a class='" + classes+ "' " + addl);
-        $("div#css_top_bar  .css_share_links").append("<a class='" + classes + "'           " + addl);
-    }
-}
-
 y.facebook_app_id = "986331034712589";
 y.google_client_id = "846812482710";
 
@@ -35,6 +16,7 @@ y.socialLogin = function (post_data, login_event, login_fail_event) {
             );
         } else {
             if (data_back.msg) {
+                y.clearMessages();
                 y.addMessage(data_back.msg, data_back.type);
             }
             if (!data_back.redirect) {
