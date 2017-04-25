@@ -34,6 +34,10 @@ a.EM {
     background: url('mail-25.png') no-repeat;
 }
 
+.btn-social {
+    background-image: none;
+}
+
 
 /* phone-visible */
 #css_top_bar > span > div.css_share_links			{ float:right; display:block; border-top-left-radius: 4px; text-align:right;margin-top: 5px;border: 1px solid rgb(179, 179, 179);border-radius: 4px;padding:3px; }
