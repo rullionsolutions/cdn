@@ -8,22 +8,21 @@
   fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};
 }(window,document,'script'));
 
-// TODO Fix apparent race conditionin events when switching tabs
 function renderCharts() {
     $(".analytics-chart").each(function (index) {
         var chart = new gapi.analytics.googleCharts.DataChart({
             query: $(this).data("query"),
             chart: $(this).data("chart"),
         });
-        chart.execute();
+        var variable_data = {
+            query: {
+                "start-date": $("#ga-date-start").val(),
+                "end-date": $("#ga-date-end").val(),
+            },
+        };
+        chart.set(variable_data).execute();
     });
 }
-
-// TODO Look into another way to sort this out, having multiple calls to this feels messy, but
-// alternatively, including the GA specific stuff in the master.js event binding does too...
-$(document).on("loadSuccess", function () {
-    $("ul#css_page_tabs > li").click(renderCharts);
-});
 
 gapi.analytics.ready(function () {
     /**
@@ -36,4 +35,7 @@ gapi.analytics.ready(function () {
     });
 
     renderCharts();
+    $("ul#css_page_tabs > li").click(location.reload.bind(window.location));
+    $("#ga-date-start").change(renderCharts);
+    $("#ga-date-end").change(renderCharts);
 });
