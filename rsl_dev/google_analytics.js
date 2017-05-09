@@ -16,8 +16,10 @@ function renderCharts() {
         });
         var variable_data = {
             query: {
-                "start-date": $("#ga-date-start").val(),
-                "end-date": $("#ga-date-end").val(),
+                // TODO this method introduces an out-by-one error due to daylight savings
+                // (getDate returns a jsDate at midnight local time, toISOString outputs UTC)
+                "start-date": $("#ga-date-start > input").datepicker("getDate").toISOString().slice(0, 10),
+                "end-date": $("#ga-date-end > input").datepicker("getDate").toISOString().slice(0, 10),
             },
         };
         chart.set(variable_data).execute();
@@ -36,6 +38,6 @@ gapi.analytics.ready(function () {
 
     renderCharts();
     $("ul#css_page_tabs > li").click(location.reload.bind(window.location));
-    $("#ga-date-start").change(renderCharts);
-    $("#ga-date-end").change(renderCharts);
+    $("#ga-date-start > input").change(renderCharts);
+    $("#ga-date-end > input").change(renderCharts);
 });
