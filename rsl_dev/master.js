@@ -2009,7 +2009,6 @@ $(document).on("initialize", function (event, target, opts) {
 /*----------------------------------------------Reference/Combo (Autocompleter)-------------------------------------------------*/
 
 y.afterBlur = function (modified, field, field_value, input_cntrl, prev_value, map) {
-    console.log("y.afterBlur");
     if (modified) {
         modified = false;
         if (field.hasClass("css_reload")) {
