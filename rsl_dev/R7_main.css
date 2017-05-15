@@ -1,0 +1,357 @@
+
+
+
+/* Sections */
+section						{ margin-bottom: 60px; }	/* not used yet */
+.css_section_text			{ margin-bottom: 10px; }
+
+.css_resp_div_block > * {
+    margin: 5px 5px 0px 0px;
+}
+
+*[url]                      { cursor: pointer; }
+a[rel='tooltip']            { text-decoration: none; }
+
+form.flexbox label			{ font-size: 8pt; color: gray; margin-bottom: 0; display: block; }
+td > div.form-group             { margin-bottom: 0px; }
+td > div.form-group input		{ margin-bottom: 0px; }
+td > div.form-group select      { margin-bottom: 0px; }
+td > div.form-group textarea    { margin-bottom: 0px; }
+.form-group.css_mand label.control-label:after { content: " *"; }
+
+.form-horizontal .form-control-static		{ display: block; padding-top: 5px; }		/* forward-port to TB3 */
+
+.form-horizontal-readonly	{ display: table; border-collapse: collapse; }
+.form-horizontal-readonly .form-group       { display: table-row; }
+.form-horizontal-readonly .form-group > *   { display: table-cell; border-bottom: 1px solid #dddddd; padding: 5px; }
+.form-horizontal-readonly .control-label       { text-align: right; min-width: 100px; }
+
+/* Adding .controls to the parent div of span.help-inline would negate the need for the code below */
+.css_edit.error .help-inline { color: #b94a48; font-weight: bold; }
+
+/* Search Sections */
+.css_search_filters			{ border-collapse: separate; border-spacing: 10px; }
+.css_search_filters input, .css_search_filters select 	{ margin-bottom: 0; }
+.css_search_filters > tr	{ margin-bottom: 5px; }
+.css_filter_label			{ text-align: right; }
+.css_filter_oper_disp		{ padding-bottom: 6px; }
+div.css_search_control > *	{ margin: 0 10px 10px 0; display: inline-block; }
+div.css_search_control > button	{ margin-top: 10px; }
+
+
+/* Lists */
+table.css_list				{
+    margin-bottom: 0;
+    background-color: white; /* in case overlaps frame */
+}
+table.css_list thead th		{
+    vertical-align: top;
+    background-color: #F0F0F0;
+}
+tr.css_row_odd				{ background-color: #F8F8F8; }
+tr.css_row_start 			{ background-color: #EEE; }
+tr.css_row_total 			{ background-color: #EEE; }
+/* tr.css_row_total > td 		{ text-align: right; } */
+th.css_level_break_header	{ width: 20px; }
+th.css_col_group_header		{ text-align: center; }
+tr.css_row_hidden			{ display: none; }
+span.css_list_level_break_chooser		{ margin-right: 5px; }
+.css_list_add				{ margin: 0 5px 0 0; display: inline-block; }
+.css_list_add > div 		{ margin-bottom: 0 }
+.css_list_add span.add-on	{ padding: 0 6px; font-size: x-small; }
+/*
+.css_list_add select 		{ padding: 0 6px; font-size: x-small; line-height: 20px; height: 22px; }
+*/
+span.css_row_pager          { vertical-align: top; }
+span.css_row_pager i, span.css_list_col_chooser i, td.css_col_control i, span.css_list_add i { opacity: 0.75; }
+span.css_column_pager		{ float: right; }
+a.btn.css_list_rowcount			{ text-align: center; opacity: 1; }
+span.css_list_col_chooser 	{ cursor: pointer; float: right; }
+div.css_list_choose_cols	{ margin: 2px; padding: 4px; font-size: smaller; }
+div.css_list_choose_cols > button	{ margin: 0 2px 2px 0 }
+span.css_list_cols_filter > *		{ display: inline; margin-right: 5px; width: 120px; }
+
+/*Column Chooser Join Feature*/
+div.css_list_choose_cols_header { height: 40px; }
+div.css_list_choose_cols_join_type_btn_group { margin-right: 20px; }
+.css_remove_join_btn { margin-right: 20px; }
+
+/* Bulk */
+th.css_mr_sel				{ width: 15px; }
+th.css_row_control			{ width: 50px; }
+tr.css_mr_selected > td		{ background-color: #cef /* #8cc3dd */ !important; }
+td.css_mr_sel > input 		{ display: none }
+td.css_mr_sel > span.icon-ok	{ display: none; }
+tr.css_mr_selected > td.css_mr_sel > span.icon-ok	{ display: inline-block; }
+table.css_mr_selecting > tfoot > tr.css_mr_actions > td    { background-color: #cef !important; }
+.css_bulk					{ margin-left: 5px; }
+
+
+.css_right_align_numbers th.css_type_number			{ text-align: right; }
+.css_right_align_numbers td.css_type_number			{ text-align: right; }
+.css_right_align_numbers th.css_align_center		{ text-align: center; }
+.css_right_align_numbers td.css_align_center		{ text-align: center; }
+.css_right_align_numbers th.css_align_right			{ text-align: right; }
+.css_right_align_numbers td.css_align_right			{ text-align: right; }
+.css_right_align_numbers td.css_align_right	input	{ text-align: right; }
+
+
+/* ItemSetForm Sections */
+.css_section_ItemSetForm form {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 10px;
+}
+
+/* Tile Sections */
+div.css_section_Tiles input	{ margin-right: 10px; margin-bottom: 10px; }
+div.css_section_Tiles .btn	{ margin-right: 10px; margin-bottom: 10px; }
+div.css_section_TileGrid .table>tbody>tr>td, div.css_section_TileGrid .table>tbody>tr>th { padding: 4px; }
+.css_tile			{ display: inline-block; margin: 5px; padding: 5px; border: 1px solid #ddd; border-radius: 5px; background-color: #F8F8F8; }
+.css_tile:hover   	{ background-color: #EEE; }
+.css_tile > img		{ margin-right: 4px; }
+.css_tile > div		{ display: inline; }
+.css_tiles_footer	{ clear: left; }
+td > .css_tile    	{ text-align: left; }
+
+/* Home Page Tiles */
+.css_section_HomePageSection i.icon-large		{ vertical-align: middle; margin-right: 6px; }
+
+/* Fields */
+
+.css_diagram		{ display: inline-block; margin-left: 10px; vertical-align: middle; background-color: white; /* in case overlaps frame */ }
+.css_diagram a 		{ cursor: pointer; }
+
+div.css_type_datetime > input:first-child { margin-right: 5px; }
+div.css_type_duration.css_edit > span	{ margin-left: 20px; }
+div.css_type_duration > span > label	{ display: inline-block; margin: 0 20px 0 5px; vertical-align: middle; }
+a.css_daterange_iteration				{ display: block; height: 18px; background-color: rgb(154, 158, 252); border: 1px solid blue; }
+a.css_daterange_milestone				{ font-weight: bold; font-size: 12pt; }
+a.css_daterange_milestone:hover 		{ text-decoration: none; }
+th.daterange 							{ /*padding: 0;*/ background: #F0f0f0 url(/cdn/icons/daterange_stripe.png); }
+th.daterange > div > span 				{ display: inline-block; width: 42px; }
+td.daterange 							{ /*padding: 0;*/ background: url(/cdn/icons/daterange_stripe.png); }
+div.css_richtext.css_edit > div	{
+								background-color: #FFFFFF; border: 1px solid #cccccc; font-weight: normal;
+								box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+								transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+								border-radius: 4px 4px 4px 4px; padding: 4px;
+							}
+div.css_richtext table		{ border-collapse: collapse; }
+div.css_richtext table td	{ border: 1px solid #aaa; padding: 4px; }
+
+/* underline tooltips even before hover, unless the label is a unicode icon
+a[rel='tooltip'][title]						{ text-decoration: underline; }
+a[rel='tooltip'][title].css_uni_icon		{ text-decoration: none; }
+*/
+
+
+img							{ vertical-align: middle; border: 0; margin-right: 4px; }
+div.dropdown				{ display: inline; }
+img.ui-datepicker-trigger	{ cursor: pointer; margin-left: 4px; }
+.ui-datepicker {
+    z-index: 900;
+}
+
+div.css_type_textarea		{
+								/* to work inside tables */ white-space: pre-wrap; /* css-3 */
+								white-space: -moz-pre-wrap; /* Mozilla, since 1999 */   white-space: -pre-wrap; /* Opera 4-6 */
+								white-space: -o-pre-wrap;    /* Opera 7 */              word-wrap: break-word;  /* Internet Explorer 5.5+ */
+								overflow-wrap: break-word; word-break: break-word;
+							}
+div.controls.css_richtext	{ font-weight: normal; }
+.css_type_horizbuttons label	{ display: inline; margin-left: 5px; margin-right: 10px; }
+
+div.qq-uploader				{ display: inline-block; width: auto; }
+div.qq-upload-button		{ /* this is a straight copy of Twitter-Bootstrap .btn */
+								-moz-border-bottom-colors: none; -moz-border-left-colors: none;
+								-moz-border-right-colors: none; -moz-border-top-colors: none;
+								background-color: #F5F5F5; background-image: linear-gradient(to bottom, #FFFFFF, #E6E6E6);
+								background-repeat: repeat-x;
+								border-color: #BBBBBB #BBBBBB #A2A2A2; border-image: none;
+								border-radius: 4px 4px 4px 4px; border-style: solid; border-width: 1px;
+								box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+								color: #333333; cursor: pointer; display: inline-block;
+								font-size: 10pt; line-height: 20px;
+								margin-bottom: 0; padding: 4px 12px;
+								text-align: center; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+								vertical-align: middle; }
+ul.qq-upload-list			{ display: inline-block; }
+ul.qq-upload-list > li		{ border-radius: 5px; padding: 6px; font-weight: normal; font-size: 10pt; }
+ul.qq-upload-list > li.qq-upload-success	{ background-color: transparent; color: #5DA30C; }
+ul.qq-upload-list > li a	{ text-decoration: underline; color: black; }
+
+span.css_attr_item			{ display: inline-block; }
+span.css_attr_item > label	{ display: inline; margin-left: 5px; margin-right: 15px; vertical-align: middle; }
+
+.css_hide					{ display: none !important; }
+.css_cmd					{ cursor: pointer; }
+.css_undo_link				{ font-weight: bold; text-decoration: underline; }
+.dropdown-toggle			{ cursor: pointer; }
+
+
+.css_uni_icon				{ font-size: 10pt; font-weight: normal; margin-right: 4px; }
+.css_uni_icon:hover			{ text-decoration: none; color: black; }
+.css_uni_icon_lrg			{ font-size: 12pt; font-weight: bold; margin-right: 4px; }
+.css_uni_icon_lrg:hover		{ text-decoration: none; color: black; }
+.css_uni_icon_off			{ font-size: 10pt; margin-right: 4px; text-decoration: none; }
+.css_uni_icon_off:hover		{ text-decoration: none; }
+
+
+/* FlexBox Grid Layout */
+
+.flexbox					{ display: flex; flex-wrap: wrap; }
+.flexbox div.form-group	    { margin: 0px 10px 10px 0; background-color: #f8f8f8; padding: 5px 10px;
+								border-radius: 3px; border: 1px solid #dddddd; display: inline-block; }
+.fb-item-1					{ width:   60px; }
+.fb-item-2					{ width:  120px; }
+.fb-item-3					{ width:  180px; }
+.fb-item-4					{ width:  240px; }
+.fb-item-5					{ width:  300px; }
+.fb-item-6					{ width:  360px; }
+.fb-item-7					{ width:  420px; }
+.fb-item-8					{ width:  480px; }
+.fb-item-9					{ width:  540px; }
+.fb-item-10					{ width:  600px; }
+.fb-item-11					{ width:  660px; }
+.fb-item-12					{ width:  720px; }
+
+
+
+/* Frame Elements */
+
+.css_page_links > *     {
+    font-size: 12px;
+    text-align: right;
+    display: block;
+    margin: 10px 10px 0 10px;
+    white-space: normal;
+}
+.page-sidebar-minified .css_page_links *:hover { width: 200px; }
+.page-sidebar-minified .css_page_links         .css_link_text { display: none; }
+.page-sidebar-minified .css_page_links a:hover .css_link_text { display: inline; }
+
+ul.sub-menu li.nav-header {
+    margin: 10px 0 5px 20px;
+    text-transform: uppercase;
+}
+
+/* Title Bar */
+
+#css_nav_icons              { float: right; }
+#css_nav_icons > *          { margin-left: 10px; text-decoration: none; }
+
+.css_page_tabs              { margin-bottom: 20px; }
+.css_page_tabs > li         { cursor: pointer; }
+
+
+/* Buttons at bottom */
+
+div.css_page_buttons        { clear: both; margin-bottom: 20px; }
+div.css_page_buttons > button   { margin-right: 10px; }
+
+
+.modal-dialog h2            { font-size: 18px; }
+
+
+
+
+/*
+https://github.com/bassjobsen/typeahead.js-bootstrap-css/blob/master/typeaheadjs.css
+*/
+
+span.twitter-typeahead .tt-menu,
+span.twitter-typeahead .tt-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  list-style: none;
+  font-size: 12px;
+  text-align: left;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+  background-clip: padding-box;
+}
+span.twitter-typeahead .tt-suggestion {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: #333333;
+  white-space: nowrap;
+}
+span.twitter-typeahead .tt-suggestion.tt-cursor,
+span.twitter-typeahead .tt-suggestion:hover,
+span.twitter-typeahead .tt-suggestion:focus {
+  background-color: #F0F0F0;
+  text-decoration: none;
+  outline: 0;
+  cursor: pointer;
+/*  background-color: #337ab7; - to be specified according to theme */
+}
+.input-group.input-group-lg span.twitter-typeahead .form-control {
+  height: 46px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
+  border-radius: 6px;
+}
+.input-group.input-group-sm span.twitter-typeahead .form-control {
+  height: 30px;
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+span.twitter-typeahead {
+  width: 100%;
+}
+.input-group span.twitter-typeahead {
+  display: block !important;
+  height: 34px;
+}
+.input-group span.twitter-typeahead .tt-menu,
+.input-group span.twitter-typeahead .tt-dropdown-menu {
+  top: 32px !important;
+}
+.input-group span.twitter-typeahead:not(:first-child):not(:last-child) .form-control {
+  border-radius: 0;
+}
+.input-group span.twitter-typeahead:first-child .form-control {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.input-group span.twitter-typeahead:last-child .form-control {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+.input-group.input-group-sm span.twitter-typeahead {
+  height: 30px;
+}
+.input-group.input-group-sm span.twitter-typeahead .tt-menu,
+.input-group.input-group-sm span.twitter-typeahead .tt-dropdown-menu {
+  top: 30px !important;
+}
+.input-group.input-group-lg span.twitter-typeahead {
+  height: 46px;
+}
+.input-group.input-group-lg span.twitter-typeahead .tt-menu,
+.input-group.input-group-lg span.twitter-typeahead .tt-dropdown-menu {
+  top: 46px !important;
+}
