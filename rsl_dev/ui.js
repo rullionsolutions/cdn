@@ -1579,8 +1579,8 @@ x.ui.table.calcTableColWidths = function () {
 
 x.ui.table.addColumnPagingButtons = function () {
     var that = this;
-    if (this.table_elmt.find("tfoot > tr > td > div#css_column_pager").length === 0) {
-        this.table_elmt.find("tfoot > tr > td").append("<div id='css_column_pager' class='btn-group' "
+    if (this.table_elmt.find("tfoot > tr:last > td > div#css_column_pager").length === 0) {
+        this.table_elmt.find("tfoot > tr:last > td").append("<div id='css_column_pager' class='btn-group' "
             + "style='display: inline-block; float: right; margin-right: 10px; '>"
             + "<button class='btn btn-xs btn-default' id='css_col_prev'><i class='fa fa-lg fa-caret-left'></i></button>"
             + "<button class='btn btn-xs btn-default' id='css_col_next'><i class='fa fa-lg fa-caret-right'></i></button></div>");
