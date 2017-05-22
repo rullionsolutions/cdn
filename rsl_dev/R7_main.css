@@ -19,15 +19,18 @@ td > div.form-group select      { margin-bottom: 0px; }
 td > div.form-group textarea    { margin-bottom: 0px; }
 .form-group.css_mand label.control-label:after { content: " *"; }
 
+.form-horizontal-readonly { display: table; border-collapse: collapse; }
+.form-horizontal-readonly .form-group       { display: table-row; border-bottom: 1px solid #dddddd; }
+.form-horizontal-readonly .form-group > *   { display: table-cell; padding: 7px 15px; }
+.form-horizontal-readonly .control-label       { text-align: right; min-width: 100px; }
+
 /*
 .form-horizontal .form-control-static		{ display: block; padding-top: 5px; }
-
-.form-horizontal-readonly	{ display: table; border-collapse: collapse; }
-.form-horizontal-readonly .form-group       { display: table-row; }
-.form-horizontal-readonly .form-group > *   { display: table-cell; border-bottom: 1px solid #dddddd; padding: 5px; }
-.form-horizontal-readonly .control-label       { text-align: right; min-width: 100px; }
-*/
 .form-horizontal.form-bordered .form-group > .control-label, .form-horizontal.form-bordered .form-group > div { padding: 10px; }
+.form-horizontal.form-bordered .form-group.css_disp > * { line-height: 1.43; padding: 7px 15px 0 15px; }
+.form-horizontal.form-bordered .form-group.css_disp > div > p.form-control-static { line-height: 1.43; padding: 0; }
+*/
+
 
 
 /* Adding .controls to the parent div of span.help-inline would negate the need for the code below */
