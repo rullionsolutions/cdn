@@ -337,6 +337,7 @@ x.ui.navigateToNewPage = function (params, reload_opts) {
     params.refer_page_id = this.uri_page_id;
     params.refer_page_key = this.uri_page_key;
     params.refer_section_id = reload_opts.refer_section_id;
+    params.selected_rows = reload_opts.selected_rows;
     this.debug("navigateToNewPage(" + JSON.stringify(params) + ", " + JSON.stringify(reload_opts) + ")");
 
     if (params.skin === "modal") {
