@@ -138,39 +138,22 @@ x.ui.reportMessage = function (msg) {
     //     msg.text = text_parts.remainder;
     // }
     this.setHighestMsgLevel(msg.type);
-    this.setMessageIconFromType(msg);
     msg.time = "";
+    msg.icon = this.getMessageIcon(msg.type);
+    msg.class_name = this.getMessageClass(msg.type);
     // msg.sticky = true;
     $.gritter.add(msg);
 };
 
-x.ui.splitTextIntoTitleAndRemainder = function (str) {
-    var break_point = str.indexOf(" ", 30);
-    var html_tag_index = str.indexOf("<");
-    var out = {
-        title: str,
-        remainder: "",
-    };
-    if (html_tag_index > -1 && html_tag_index < break_point) {
-        out.title = str.substr(0, html_tag_index);
-        out.remainder = str.substr(html_tag_index);
-    } else if (break_point > -1) {
-        out.title = str.substr(0, break_point);
-        out.remainder = str.substr(break_point + 1);
-    }
-    this.debug("splitTextIntoTitleAndRemainder(" + str + ") = " + out.title + ", " + out.remainder);
-    return out;
-};
-
 x.ui.getMessageClass = function (msg_type) {
     if (msg_type === "E") {
-        return "alert-danger";
+        return "bg-red";
     }
     if (msg_type === "W") {
-        return "alert-warning";
+        return "bg-orange";
     }
     if (msg_type === "I") {
-        return "alert-info";
+        return "bg-green";
     }
     return "";
 };
@@ -185,14 +168,16 @@ x.ui.getMessageTypeBox = function (msg_type) {
     return elmt;
 };
 
-x.ui.setMessageIconFromType = function (msg) {
-    if (msg.type === "I") {
-        msg.icon = "fa fa-2x fa-smile-o";
-    } else if (msg.type === "W") {
-        msg.icon = "fa fa-2x fa-meh-o";
-    } else if (msg.type === "E") {
-        msg.icon = "fa fa-2x fa-frown-o";
+x.ui.getMessageIcon = function (msg_type) {
+    var icon;
+    if (msg_type === "I") {
+        icon = "fa fa-2x fa-smile-o";
+    } else if (msg_type === "W") {
+        icon = "fa fa-2x fa-meh-o";
+    } else if (msg_type === "E") {
+        icon = "fa fa-2x fa-frown-o";
     }
+    return icon;
 };
 
 
@@ -409,11 +394,10 @@ x.ui.navigateToNewPage = function (params, reload_opts) {
 */
 
 x.ui.loadFirstTimePage = function (params, reload_opts) {
+    reload_opts.first_time_for_page = true;
     this.debug("loadFirstTimePage(" + JSON.stringify(params) + ", " + JSON.stringify(reload_opts) + ")");
     this.reload_count += 1;
     this.performAjax(params, reload_opts);
-    $(this.getScrollElement()).scrollTop(0);
-    $("div[data-scrollbar=true]").scrollTop(0);
 };
 
 x.ui.reloadCurrentPage = function (override_params, reload_opts) {
@@ -487,7 +471,6 @@ x.ui.redirect = function (url, reload_opts) {
         this.close();
         window.location.href = url;
     }
-    // this.load(URI(url), reload_opts);
 };
 
 
@@ -508,53 +491,18 @@ x.ui.performAjax = function (params, reload_opts) {
         url: "dyn/?mode=exchange",
         type: "POST",
         data: $.param(params),
-        // CL-Blanking this request header allows IOS6 Safari and Chrome 24+ to work (May benefit other webkit based browsers)
-        // These headers were also blanked when this fix was initially added - Authorization, If-None-Match
+        // CL-Blanking this request header allows IOS6 Safari and Chrome 24+ to work
+        // (May benefit other webkit based browsers)
+        // These headers were also blanked when this fix was initially added:
+        // - Authorization, If-None-Match
         beforeSend: function (xhr) {        // IOS6 fix
             xhr.setRequestHeader("If-Modified-Since", "");
         },
         success: function (data_back, text_status, xml_http_request) {
-            x.ui.main.last_server_response_time = new Date();
-            if (xml_http_request.status === 204) {      // "our" redirection...
-                that.prompt_message = null;
-                that.active = true;     // allow subsequent performAjax
-                that.redirect(xml_http_request.getResponseHeader("Location"), reload_opts);
-            } else {
-                that.setLoadContent(data_back);
-                if (that.loaded_skin && that.loaded_skin !== that.skin) {
-                    // window.location = that.loaded_skin + window.location.hash;
-                    that.redirect(that.loaded_skin + window.location.hash);
-                } else {
-                    that.open(reload_opts.closeable);
-                    that.setURL();
-                    that.activate();
-                }
-            }
+            that.performAjaxSuccess(data_back, xml_http_request, reload_opts);
         },
         error: function (xml_http_request, text_status) {
-            var error_text = xml_http_request.getResponseHeader("X-Response-Message");
-            x.ui.main.last_server_response_time = new Date();
-            if (!error_text) {
-                if (xml_http_request.status === 0) {
-                    error_text = "server unavailable";
-                } else {
-                    error_text = "[" + xml_http_request.status + "] " + xml_http_request.statusText;
-                }
-            }
-            if (xml_http_request.status === 401) {
-                if (that.default_guest_id) {
-                    that.guestLogin(that.default_guest_id, params, reload_opts);
-                } else {
-                    x.ui.modal.promptLogin(params);
-                }
-            } else {
-                that.reportMessage({
-                    type: "E",
-                    text: error_text,
-                });
-                that.setContent("<a href='#page_id=" + that.default_page + "'>return to home</a>");
-                that.activate();
-            }
+            that.performAjaxError(xml_http_request, text_status, params, reload_opts);
         },
     });
 };
@@ -564,6 +512,54 @@ x.ui.forceLoad = function (url) {
         window.location.href = url;
     }
     window.location.reload();
+};
+
+x.ui.performAjaxSuccess = function (data_back, xml_http_request, reload_opts) {
+    x.ui.main.last_server_response_time = new Date();
+    if (xml_http_request.status === 204) {      // "our" redirection...
+        this.prompt_message = null;
+        this.active = true;     // allow subsequent performAjax
+        this.redirect(xml_http_request.getResponseHeader("Location"), reload_opts);
+    } else {
+        this.setLoadContent(data_back);
+        if (this.loaded_skin && this.loaded_skin !== this.skin) {
+            this.redirect(this.loaded_skin + window.location.hash);
+        } else {
+            this.open(reload_opts.closeable);
+            this.setURL();
+            this.activate();
+            if (reload_opts.first_time_for_page) {
+                $(this.getScrollElement()).scrollTop(0);
+                $("div[data-scrollbar=true]").scrollTop(0);
+            }
+        }
+    }
+};
+
+x.ui.performAjaxError = function (xml_http_request, text_status, params, reload_opts) {
+    var error_text = xml_http_request.getResponseHeader("X-Response-Message");
+    x.ui.main.last_server_response_time = new Date();
+    if (!error_text) {
+        if (xml_http_request.status === 0) {
+            error_text = "server unavailable";
+        } else {
+            error_text = "[" + xml_http_request.status + "] " + xml_http_request.statusText;
+        }
+    }
+    if (xml_http_request.status === 401) {
+        if (this.default_guest_id) {
+            this.guestLogin(this.default_guest_id, params, reload_opts);
+        } else {
+            x.ui.modal.promptLogin(params);
+        }
+    } else {
+        this.reportMessage({
+            type: "E",
+            text: error_text,
+        });
+        this.setContent("<a href='#page_id=" + this.default_page + "'>return to home</a>");
+        this.activate();
+    }
 };
 
 x.ui.getScrollElement = function () {
@@ -727,8 +723,8 @@ x.ui.movePageMarkup = function () {
             $(this).attr("data-prev-key"),
             $(this).attr("data-next-key"));
     });
-    that.setLinks($(this.selectors.target).find("#css_payload_page_links   > *"));
-    that.setTabs($(this.selectors.target).find("#css_payload_page_tabs    > *"));
+    that.setLinks($(this.selectors.target).find("#css_payload_page_links > *"));
+    that.setTabs($(this.selectors.target).find("#css_payload_page_tabs > *"));
     that.setButtons($(this.selectors.target).find("#css_payload_page_buttons > *"));
 };
 
