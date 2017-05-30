@@ -227,18 +227,41 @@ span.css_attr_item > label	{ display: inline; margin-left: 5px; margin-right: 15
 
 
 /* Frame Elements */
-
-.css_page_links > *     {
-    font-size: 12px;
-    text-align: right;
-    display: block;
-    margin: 10px 10px 0 10px;
-    white-space: normal;
+.slimScrollDiv { padding-top: 10px; }
+#footer {
+    position: fixed;
+    bottom: 0;
+    margin: 0;
+    border-top: 1px solid #CAD0D6;
+    padding: 10px 0 0 230px;
+    width: 100%;
+    background: white;
+    z-index: 1000;
 }
+@media (max-width: 767px) {
+  #footer {
+    padding-left: 10px;
+  }
+}
+.css_page_links > * {
+    font-size: 12px;
+    display: inline-block;
+    margin: 0 10px 10px 0;
+}
+
+div.css_page_buttons            {}
+div.css_page_buttons > button   { margin: 0 10px 10px 0; }
+.btn-scroll-to-top {
+  right: 12px;
+  bottom: 12px;
+}
+
+
+/* not required at the moment...
 .page-sidebar-minified .css_page_links *:hover { width: 200px; }
 .page-sidebar-minified .css_page_links         .css_link_text { display: none; }
 .page-sidebar-minified .css_page_links a:hover .css_link_text { display: inline; }
-
+*/
 ul.sub-menu li.nav-header {
     margin: 10px 0 5px 20px;
     text-transform: uppercase;
@@ -254,9 +277,6 @@ ul.sub-menu li.nav-header {
 
 
 /* Buttons at bottom */
-
-div.css_page_buttons        { clear: both; margin-bottom: 20px; }
-div.css_page_buttons > button   { margin-right: 10px; }
 
 
 .modal-dialog h2            { font-size: 18px; }

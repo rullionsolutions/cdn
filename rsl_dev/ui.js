@@ -1,4 +1,5 @@
-/* global window, document, $, console, confirm, setTimeout, formatDate, Highcharts, URI, google, Viz */
+/* global window, document, $, console, confirm, setTimeout, formatDate, Highcharts, URI, google,
+Viz */
 
 "use strict";
 
@@ -274,7 +275,7 @@ x.ui.isExternalURI = function (uri) {
 };
 
 x.ui.sameSimpleURL = function (skin, page_id, page_key) {
-    return (!skin || skin === this.uri_skin)
+    return (!skin || skin === this.skin)
            && (page_id === this.uri_page_id)
            && (page_key === this.uri_page_key || (!page_key && !this.uri_page_key));
 };
@@ -295,49 +296,97 @@ x.ui.close = function () {
     this.debug("ignoring close()");
 };
 
+
+// ------------------------------------------------------------------------------------- Navigation
+window.onhashchange = function () {
+    x.ui.main.hashChange();
+};
+
+x.ui.hashChange = function () {
+    this.load(window.location.href);
+};
+
+x.ui.backwardCompatibilityQueryString = function () {
+    var uri = URI(window.location.href);
+    var query_string = uri.query();
+    if (query_string) {
+        uri.fragment(query_string);
+        uri.query("");
+        window.location.href = uri.href();
+    }
+};
+
 x.ui.load = function (uri, reload_opts) {
     var params;
     if (typeof uri === "string") {
         uri = URI(uri);         // otherwise assume is this object already
     }
     this.info("load(" + uri + ", " + JSON.stringify(reload_opts) + ")");
-    this.setThisURIParams();
+    // this.setThisURIParams();
     if (this.isExternalURI(uri) || uri.pathname().indexOf("dyn/") === 0) {
         window.open(uri.href());
     }
     params = this.splitParams(uri.fragment());
     params.skin = uri.filename();
     reload_opts = reload_opts || {};
-    if (typeof reload_opts.open_new_window !== "boolean" && uri.protocol() === "mailto") {
-        reload_opts.open_new_window = true;
-    }
+    // if (typeof reload_opts.open_new_window !== "boolean" && uri.protocol() === "mailto") {
+    //     reload_opts.open_new_window = true;
+    // }
     this.reload(params, reload_opts);
 };
 
-x.ui.reload = function (params, reload_opts) {
-    params.page_key = params.page_key || "";
-    if (!params.page_id) {
-        params.page_id = this.uri_page_id || this.default_page;
-        params.page_key = this.uri_page_key;
+// Tab clicks
+$(document).on("click", "ul.css_page_tabs > li", function (event) {
+    x.ui.getLocal(this).reload({ page_tab: $(this).attr("id"), });
+});
+
+// Button clicks, col heading clicks
+$(document).on("click", ".css_cmd", function (event) {
+    if (!this.onclick) {         // imgs don't have hrefs
+        x.ui.getLocal(this).reload({
+            page_button: $(this).attr("id"),
+        }, {
+            confirm_text: $(this).data("confirm-text"),
+        });
     }
+});
+
+x.ui.reload = function (params, reload_opts) {
     reload_opts = reload_opts || {};
+    params.page_key = params.page_key || "";
+    params.skin = params.skin || this.skin;
+    if (!params.page_id) {
+        params.page_id = this.loaded_page_id || this.default_page;
+        params.page_key = this.loaded_page_key;
+    }
     this.debug("reload(" + JSON.stringify(params) + ", " + JSON.stringify(reload_opts) + ")");
-    if (!this.sameSimpleURL(params.skin, params.page_id, params.page_key)
-            || reload_opts.open_new_window
-            || reload_opts.force_load) {
-        this.navigateToNewPage(params, reload_opts);
-    } else if (!this.sameSimpleURL(this.loaded_skin, this.loaded_page_id, this.loaded_page_key)) {
+    if (reload_opts.confirm_text) {
+        if (!confirm(reload_opts.confirm_text)) {
+            return;
+        }
+    }
+    params.selected_rows = reload_opts.selected_rows;
+    delete reload_opts.selected_rows;
+
+    // if (!this.sameSimpleURL(params.skin, params.page_id, params.page_key)
+    //         || reload_opts.open_new_window
+    //         || reload_opts.force_load) {
+    //     this.navigateToNewPage(params, reload_opts);
+    // } else
+    // if (!this.sameSimpleURL(this.loaded_skin, this.loaded_page_id, this.loaded_page_key)) {
+    if (params.skin !== this.loaded_skin || params.page_id !== this.loaded_page_id
+            || params.page_key !== this.loaded_page_key) {
         this.loadFirstTimePage(params, reload_opts);
     } else {
         this.reloadCurrentPage(params, reload_opts);
     }
 };
 
+/*
 x.ui.navigateToNewPage = function (params, reload_opts) {
     params.refer_page_id = this.uri_page_id;
     params.refer_page_key = this.uri_page_key;
     params.refer_section_id = reload_opts.refer_section_id;
-    params.selected_rows = reload_opts.selected_rows;
     this.debug("navigateToNewPage(" + JSON.stringify(params) + ", " + JSON.stringify(reload_opts) + ")");
 
     if (params.skin === "modal") {
@@ -357,6 +406,7 @@ x.ui.navigateToNewPage = function (params, reload_opts) {
         window.location = this.getURIFromParams(params).href();
     }
 };
+*/
 
 x.ui.loadFirstTimePage = function (params, reload_opts) {
     this.debug("loadFirstTimePage(" + JSON.stringify(params) + ", " + JSON.stringify(reload_opts) + ")");
@@ -377,24 +427,23 @@ x.ui.reloadCurrentPage = function (override_params, reload_opts) {
     this.performAjax(params, reload_opts);
 };
 
-
-window.onhashchange = function () {
-    x.ui.main.hashChange();
-};
-
-x.ui.hashChange = function () {
-    this.load(window.location.href);
-};
-
-x.ui.backwardCompatibilityQueryString = function () {
-    var uri = URI(window.location.href);
-    var query_string = uri.query();
-    if (query_string) {
-        uri.fragment(query_string);
-        uri.query("");
-        window.location.href = uri.href();
+// Row clicks
+$(document).on("click", "[url]", function (event) {
+    // Avoid redirecting if clicked an anchor or button...
+    if ($(event.target).is("a") || $(event.target).parents("a").length > 0) {
+        return;
     }
-};
+    if ($(event.target).is(".btn") || $(event.target).parents(".btn").length > 0) {
+        return;
+    }
+    x.ui.getLocal(this).redirectAttribute(this, "url");
+});
+
+// Anchor clicks
+$(document).on("click", "#css_main a[href], #css_modal a[href]", function (event) {
+    x.ui.getLocal(this).redirectAttribute(this, "href");
+    return false;
+});
 
 x.ui.redirectAttribute = function (elmt, attr_id) {
     var url = $(elmt).attr(attr_id || "href");
@@ -403,32 +452,42 @@ x.ui.redirectAttribute = function (elmt, attr_id) {
 
     this.debug("redirectAttribute(" + elmt + ", " + attr_id + ")");
     if (url && url !== "#") {             // no-op urls
-        // url_parts = this.decomposeURL(url);
-        // url_parts.params.refer_section_id = $(elmt).parents("div.css_section").attr("id") || null;
         reload_opts.refer_section_id = $(elmt).parents("div.css_section").attr("id");
-        if ($(elmt).attr("target") === "_blank") {
-            reload_opts.open_new_window = true;
+        if ($(elmt).hasClass("css_bulk")) {
+            $(elmt).parents("table").eq(0).find("tr.css_mr_selected")
+            .each(function () {
+                keylist.push($(this).attr("data-key"));
+            });
+            reload_opts.selected_rows = keylist.join(",");
         }
         if ($(elmt).hasClass("css_force_load")) {
             reload_opts.force_load = true;
         }
-        if ($(elmt).hasClass("css_bulk")) {
-            $(elmt).parents("table").eq(0).find("tr.css_mr_selected").each(function () {
-                keylist.push($(this).attr("data-key"));
-            });
-            reload_opts.selected_rows = keylist.join(",");
-            // url_parts.params.selected_rows = keylist.join(",") || null;
+        if ($(elmt).attr("target") === "_blank") {
+            reload_opts.open_new_window = true;
         }
-        this.load(URI(url), reload_opts);
+        this.redirect(url, reload_opts);
     }
 };
 
 x.ui.redirect = function (url, reload_opts) {
-    this.debug("redirect(" + url + ", " + JSON.stringify(reload_opts) + ")");
     if (!url) {
         url = this.skin;
     }
-    this.load(URI(url), reload_opts);
+    if (typeof url === "string") {
+        url = URI(url);
+    }
+    this.debug("redirect(" + url + ", " + JSON.stringify(reload_opts) + ")");
+    if (url.filename() === "modal") {
+        reload_opts.closeable = true;
+        x.ui.modal.load(url, reload_opts);
+    } else if (reload_opts && reload_opts.open_new_window) {
+        window.open(url);
+    } else {
+        this.close();
+        window.location.href = url;
+    }
+    // this.load(URI(url), reload_opts);
 };
 
 
@@ -463,8 +522,8 @@ x.ui.performAjax = function (params, reload_opts) {
             } else {
                 that.setLoadContent(data_back);
                 if (that.loaded_skin && that.loaded_skin !== that.skin) {
-                    window.location = that.loaded_skin + window.location.hash;
-                    // that.reload(params, { force_load: true });
+                    // window.location = that.loaded_skin + window.location.hash;
+                    that.redirect(that.loaded_skin + window.location.hash);
                 } else {
                     that.open(reload_opts.closeable);
                     that.setURL();
@@ -498,6 +557,13 @@ x.ui.performAjax = function (params, reload_opts) {
             }
         },
     });
+};
+
+x.ui.forceLoad = function (url) {
+    if (url) {
+        window.location.href = url;
+    }
+    window.location.reload();
 };
 
 x.ui.getScrollElement = function () {
@@ -623,7 +689,7 @@ x.ui.onSessionTimeout = function () {
     var now_time = (new Date()).getTime();
     if (now_time > (x.ui.main.last_server_response_time.getTime()
             + (x.ui.main.session.max_inactive_interval * 1000))) {
-        x.ui.main.reload({}, { force_load: true, });
+        x.ui.main.forceLoad();
     } else {
         x.ui.debug(now_time + ", " + x.ui.main.last_server_response_time.getTime());
     }
@@ -1065,7 +1131,7 @@ x.ui.promptLogin = function (params) {
         },
         success: function (data) {
             if (typeof data === "object" && data.action === "normal_login") {
-                x.ui.main.reload({}, { force_load: true, });          // force full page load
+                x.ui.main.forceLoad();
             } else {
                 x.ui.main.setTitle("Log-in");
                 that.setTitle("Log-in");
@@ -1187,7 +1253,7 @@ x.ui.loginPhaseFour = function (params, data) {
     this.debug("loginPhaseFour(" + JSON.stringify(params) + ", " + JSON.stringify(data) + ")");
     if (typeof data === "object" && data.action === "normal_login") {
         x.ui.modal.close();
-        x.ui.main.load(this.post_login_url, { force_load: true, });          // force full page load
+        x.ui.main.forceLoad(this.post_login_url);
     } else {
         this.reload_count += 1;
         this.clearMessages();
@@ -1217,7 +1283,7 @@ x.ui.logout = function () {
             xhr.setRequestHeader("If-Modified-Since", "");
         },
         success: function (data_back, text_status, xml_http_request) {
-            that.load(that.skin, { force_load: true, });
+            that.forceLoad(that.skin);
         },
     });
 };
@@ -1240,44 +1306,8 @@ $(window).bind("beforeunload", function (a, b, c, d) {
 });
 */
 
-// Button clicks, col heading clicks
-$(document).on("click", ".css_cmd", function (event) {
-    var confirm_text = $(this).data("confirm-text");
-    if (confirm_text) {
-        if (!confirm(confirm_text)) {
-            return;
-        }
-    }
-    if (!this.onclick) {         // imgs don't have hrefs
-        x.ui.getLocal(this).reload({ page_button: $(this).attr("id"), });
-    }
-});
-
-// Row clicks
-$(document).on("click", "[url]", function (event) {
-    // Avoid redirecting if clicked an anchor or button...
-    if ($(event.target).is("a") || $(event.target).parents("a").length > 0) {
-        return;
-    }
-    if ($(event.target).is(".btn") || $(event.target).parents(".btn").length > 0) {
-        return;
-    }
-
-    x.ui.getLocal(this).redirectAttribute(this, "url");
-});
-
-// Anchor clicks
-$(document).on("click", "#css_main a[href]", function (event) {
-    x.ui.getLocal(this).redirectAttribute(this, "href");
-    return false;
-});
-
-// Tab clicks
-$(document).on("click", "ul.css_page_tabs > li", function (event) {
-    x.ui.getLocal(this).reload({ page_tab: $(this).attr("id"), });
-});
-
 // ------------------ submit on enter key if .css_button_main specified - deactivated for the moment
+
 $(document).on("keyup", function (event) {
     var node = event.target || event.srcElement;
     // var ui = x.ui.getLocal(this);
@@ -1526,21 +1556,31 @@ $(document).on("activateUI", function (event) {
             $(this).data("table_controller", table_obj);
         }
     });
+    x.ui.main.onLoadOrResize();
 });
 
 
+$(document).on("ready", function () {
+    x.ui.main.onLoadOrResize();
+});
+
 $(window).on("resize", function () {
+    x.ui.main.onLoadOrResize();
+});
+
+x.ui.main.onLoadOrResize = function () {
+    var footer_height = $("#footer").height();
+    $("#behind-footer-spacer").height(footer_height);
     $("table.css_list").each(function () {
         $(this).data("table_controller").onresize();
     });
-});
-
+};
 
 x.ui.table.initialize = function () {
     this.id = this.table_elmt.attr("id");
     this.calcTableColWidths();
     this.addColumnPagingButtons();
-    this.onresize();
+    // this.onresize();
 };
 
 x.ui.table.onresize = function () {
