@@ -307,12 +307,16 @@ x.ui.load = function (uri, reload_opts) {
         uri = URI(uri);         // otherwise assume is this object already
     }
     this.info("load(" + uri + ", " + JSON.stringify(reload_opts) + ")");
-    // this.setThisURIParams();
+    this.setThisURIParams();
     if (this.isExternalURI(uri) || uri.pathname().indexOf("dyn/") === 0) {
         window.open(uri.href());
     }
     params = this.splitParams(uri.fragment());
     params.skin = uri.filename();
+    if (!params.page_id) {
+        params.page_id = this.default_page;
+        params.page_key = null;
+    }
     reload_opts = reload_opts || {};
     // if (typeof reload_opts.open_new_window !== "boolean" && uri.protocol() === "mailto") {
     //     reload_opts.open_new_window = true;
@@ -341,7 +345,7 @@ x.ui.reload = function (params, reload_opts) {
     params.page_key = params.page_key || "";
     params.skin = params.skin || this.skin;
     if (!params.page_id) {
-        params.page_id = this.loaded_page_id || this.default_page;
+        params.page_id = this.loaded_page_id;
         params.page_key = this.loaded_page_key;
     }
     this.debug("reload(" + JSON.stringify(params) + ", " + JSON.stringify(reload_opts) + ")");
