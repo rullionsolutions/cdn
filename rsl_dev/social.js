@@ -1,7 +1,7 @@
 x.ui.facebook_app_id = "986331034712589";
 x.ui.google_client_id = "846812482710";
 
-x.ui.socialLogin = function (post_data, login_event, login_fail_event) {
+x.ui.main.socialLogin = function (post_data, login_event, login_fail_event) {
     var that = this;
     function postLogin(data_back) {
         that.clearMessages();
@@ -42,7 +42,7 @@ x.ui.socialLogin = function (post_data, login_event, login_fail_event) {
         url: "dyn/?mode=socialLogin",
         type: "POST",
         data: post_data,
-        timeout: y.server_timeout,
+        // timeout: y.server_timeout,
         cache: false,
         beforeSend: function (xhr) {        // IOS6 fix
             xhr.setRequestHeader("If-Modified-Since", "");

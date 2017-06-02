@@ -3,7 +3,7 @@ var googleUser = {};
 function attachSignin(element) {
     auth2.attachClickHandler(element, {},
         function (googleUser) {
-            x.ui.socialLogin({
+            x.ui.main.socialLogin({
                 user_id: googleUser.getBasicProfile().getId(),
                 token: googleUser.getAuthResponse().id_token,
                 source: "google",

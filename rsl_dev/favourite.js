@@ -1,14 +1,13 @@
 /* global $, y, console */
 
 function addAdvertToFavourites(rqmt_splr) {
-    console.log(rqmt_splr);
     $.ajax({
-        url: y.getAjaxURL("jsp/main.jsp", "mode=addFavourite"),
+        url: "dyn/?mode=addFavourite",
         type: "POST",
         data: {
             rqmt_splr: rqmt_splr,
         },
-        timeout: (y.page && y.page.browser_timeout) || y.server_timeout,
+        // timeout: (y.page && y.page.browser_timeout) || y.server_timeout,
         beforeSend: function (xhr) {        // IOS6 fix
             xhr.setRequestHeader("If-Modified-Since", "");
         },
@@ -16,16 +15,21 @@ function addAdvertToFavourites(rqmt_splr) {
             try {
                 data_back = JSON.parse(data_back);
                 if (data_back && Object.hasOwnProperty.call(data_back, "msg")) {
-                    y.clearMessages();
-                    y.addMessage(data_back.msg.text, data_back.msg.type);
+                    x.ui.main.clearMessages();
+                    x.ui.main.reportMessage({
+                        text: data_back.msg.text,
+                        type: data_back.msg.type,
+                    });
                     $(window).scrollTop(0);
                 }
             } catch (e) {
-                y.clearMessages();
+                x.ui.clearMessages();
             }
         },
         error: function (xml_http_request, text_status) {
-            y.reportError(xml_http_request.responseText || text_status);
+            x.ui.main.reportMessage({
+                text: xml_http_request.responseText || text_status,
+            });
         },
     });
 }

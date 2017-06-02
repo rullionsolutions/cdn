@@ -54,7 +54,7 @@ function checkRequest(r) {
         if (declined.length > 0) {
             reRequestPermissions();
         } else if (declined.length === 0) {
-            x.ui.socialLogin({
+            x.ui.main.socialLogin({
                 user_id: r.authResponse.userID,
                 token: r.authResponse.accessToken,
                 source: "fb",
@@ -71,8 +71,8 @@ function statusChangeCallback(response) {
     if (response.status === "connected") {
         checkRequest(response);
     } else {
-        x.ui.clearMessages();
-        x.ui.reportMessage({
+        x.ui.main.clearMessages();
+        x.ui.main.reportMessage({
             text: "Failed to login to Facebook",
             type: "E",
         });
