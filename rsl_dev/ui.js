@@ -730,6 +730,19 @@ x.ui.movePageMarkup = function () {
     that.setLinks($(this.selectors.target).find("#css_payload_page_links > *"));
     that.setTabs($(this.selectors.target).find("#css_payload_page_tabs > *"));
     that.setButtons($(this.selectors.target).find("#css_payload_page_buttons > *"));
+    that.loadIncludeFiles($(document).find("#css_page_includes > span"));
+};
+
+x.ui.loadIncludeFiles = function (include_spans) {
+    var that = this;
+    include_spans.each(function () {
+        var file = $(this).html();
+        if (file.indexOf(".css") > -1) {
+            that.checkStyle(file);
+        } else {
+            that.checkScript(file);
+        }
+    });
 };
 
 x.ui.moveTaskMarkup = function () {

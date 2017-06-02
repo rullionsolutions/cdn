@@ -1,13 +1,16 @@
-y.facebook_app_id = "986331034712589";
-y.google_client_id = "846812482710";
+x.ui.facebook_app_id = "986331034712589";
+x.ui.google_client_id = "846812482710";
 
-y.socialLogin = function (post_data, login_event, login_fail_event) {
-    var request_page = window.location.search;
+x.ui.socialLogin = function (post_data, login_event, login_fail_event) {
+    var that = this;
     function postLogin(data_back) {
-        y.clearMessages();
+        that.clearMessages();
         if (typeof data_back === "string") {        // Login failed
             $(".css_not_logged_in").removeClass("css_not_logged_in");
-            y.addMessage("Sorry, the user and password entered are not valid", "E");
+            that.reportMessage({
+                text: "Sorry, the user and password entered are not valid",
+                type: "E",
+            });
             $("div#css_body").trigger("activate",
                 [
                     $("div#css_body"),
@@ -16,8 +19,11 @@ y.socialLogin = function (post_data, login_event, login_fail_event) {
             );
         } else {
             if (data_back.msg) {
-                y.clearMessages();
-                y.addMessage(data_back.msg, data_back.type);
+                that.clearMessages();
+                that.reportMessage({
+                    type: data_back.type,
+                    text: data_back.msg,
+                });
             }
             if (!data_back.redirect) {
                 if (typeof login_fail_event === "function") {
@@ -27,26 +33,28 @@ y.socialLogin = function (post_data, login_event, login_fail_event) {
                 if (typeof login_event === "function") {
                     login_event();
                 }
-                window.location = y.getRedirectURL(data_back, request_page);
+                that.forceLoad(data_back.redirect);
             }
-
         }
     }
 
-    $.ajax({ url: y.getAjaxURL("jsp/main.jsp", "mode=socialLogin"),
-      type: "POST",
-      data: post_data,
-      timeout: y.server_timeout,
-      cache: false,
+    $.ajax({
+        url: "dyn/?mode=socialLogin",
+        type: "POST",
+        data: post_data,
+        timeout: y.server_timeout,
+        cache: false,
         beforeSend: function (xhr) {        // IOS6 fix
             xhr.setRequestHeader("If-Modified-Since", "");
         },
-        success: function(data_back) {
+        success: function (data_back) {
             postLogin(data_back);
         },
         error: function (xml_http_request, text_status) {
-            y.clearMessages();
-            y.addMessage("Server not responding #3 - " + text_status + "<br/>" + xml_http_request.responseText);
+            that.clearMessages();
+            that.reportMessage({
+                text: "Server not responding #3 - " + text_status + "<br/>" + xml_http_request.responseText,
+            });
             $("div#css_body").trigger("activate",
                 [
                     $("div#css_body"),

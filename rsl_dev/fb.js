@@ -1,6 +1,6 @@
 window.fbAsyncInit = function () {
     FB.init({
-        appId: y.facebook_app_id,
+        appId: x.ui.facebook_app_id,
         cookie: true,  // enable cookies to allow the server to access
         xfbml: true,  // parse social plugins on this page
         version: "v2.8", // use graph api version 2.8
@@ -54,7 +54,7 @@ function checkRequest(r) {
         if (declined.length > 0) {
             reRequestPermissions();
         } else if (declined.length === 0) {
-            y.socialLogin({
+            x.ui.socialLogin({
                 user_id: r.authResponse.userID,
                 token: r.authResponse.accessToken,
                 source: "fb",
@@ -71,8 +71,11 @@ function statusChangeCallback(response) {
     if (response.status === "connected") {
         checkRequest(response);
     } else {
-        y.clearMessages();
-        y.addMessage("Failed to login to Facebook", "E");
+        x.ui.clearMessages();
+        x.ui.reportMessage({
+            text: "Failed to login to Facebook",
+            type: "E",
+        });
     }
 }
 
