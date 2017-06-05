@@ -373,6 +373,9 @@ x.ui.reload = function (params, reload_opts) {
 
 /*
 x.ui.navigateToNewPage = function (params, reload_opts) {
+    params.refer_page_id = this.uri_page_id;
+    params.refer_page_key = this.uri_page_key;
+    params.refer_section_id = reload_opts.refer_section_id;
     this.debug("navigateToNewPage(" + JSON.stringify(params) + ", " + JSON.stringify(reload_opts) + ")");
 
     if (params.skin === "modal") {
@@ -396,7 +399,6 @@ x.ui.navigateToNewPage = function (params, reload_opts) {
 
 x.ui.loadFirstTimePage = function (params, reload_opts) {
     reload_opts.first_time_for_page = true;
-    reload_opts.content_scroll_top = 0;
     this.debug("loadFirstTimePage(" + JSON.stringify(params) + ", " + JSON.stringify(reload_opts) + ")");
     this.reload_count += 1;
     this.performAjax(params, reload_opts);
@@ -410,7 +412,6 @@ x.ui.reloadCurrentPage = function (override_params, reload_opts) {
         params[param] = override_params[param];
     });
     params.selected_rows = reload_opts.selected_rows;
-    reload_opts.content_scroll_top = $(this.getScrollElement()).scrollTop();
     this.performAjax(params, reload_opts);
 };
 
@@ -464,20 +465,6 @@ x.ui.redirect = function (url, reload_opts) {
     if (typeof url === "string") {
         url = URI(url);
     }
-    function appendParameter(param_id, param_val) {
-        var frag = url.fragment();
-        if (param_val !== undefined) {
-            if (frag) {
-                frag += "&";
-            }
-            url.fragment(frag + encodeURIComponent(param_id)
-                + "=" + encodeURIComponent(param_val));
-        }
-    }
-    appendParameter("refer_page_id", this.uri_page_id);
-    appendParameter("refer_page_key", this.uri_page_key);
-    appendParameter("refer_section_id", reload_opts.refer_section_id);
-
     this.debug("redirect(" + url + ", " + JSON.stringify(reload_opts) + ")");
     if (url.filename() === "modal") {
         reload_opts.closeable = true;
@@ -545,10 +532,8 @@ x.ui.performAjaxSuccess = function (data_back, xml_http_request, reload_opts) {
             this.open(reload_opts.closeable);
             this.setURL();
             this.activate();
-            if (typeof reload_opts.content_scroll_top === "number") {
-                $(this.getScrollElement()).scrollTop(reload_opts.content_scroll_top);
-            }
             if (reload_opts.first_time_for_page) {
+                $(this.getScrollElement()).scrollTop(0);
                 $("div[data-scrollbar=true]").scrollTop(0);
             }
         }
@@ -745,19 +730,6 @@ x.ui.movePageMarkup = function () {
     that.setLinks($(this.selectors.target).find("#css_payload_page_links > *"));
     that.setTabs($(this.selectors.target).find("#css_payload_page_tabs > *"));
     that.setButtons($(this.selectors.target).find("#css_payload_page_buttons > *"));
-    that.loadIncludeFiles($(document).find("#css_page_includes > span"));
-};
-
-x.ui.loadIncludeFiles = function (include_spans) {
-    var that = this;
-    include_spans.each(function () {
-        var file = $(this).html();
-        if (file.indexOf(".css") > -1) {
-            that.checkStyle(file);
-        } else {
-            that.checkScript(file);
-        }
-    });
 };
 
 x.ui.moveTaskMarkup = function () {
@@ -974,7 +946,7 @@ x.ui.main.setTabs = function (data) {
 };
 
 x.ui.main.setNavLinks = function (search_page, prev_key, next_key) {
-    if (search_page) {
+    if (prev_key || next_key) {
         $("#css_nav_search")
             .removeClass("css_hide")
             .attr("href", "#page_id=" + search_page);

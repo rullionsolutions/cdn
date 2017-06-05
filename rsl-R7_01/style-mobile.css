@@ -1,0 +1,35 @@
+/* Colour Scheme
+
+Frame, Heading Text, Non-Selected Tab Background, Selected Tab Text			Dark Purple	#700052
+Button and Selected Tab Background, Search Box, Section Footer Line			Pink		#d7c0d0
+Page Background																Beige		#ece9d8
+Detail Text																	Black		#000000
+Non-Selected Tab Text, Footer Text											White		#ffffff
+Table Header Background, Selected Button Background							Dark Grey	#cccccc
+Even Table Row Background													Medium Grey	#d9d9d9
+Odd Table Row Background													Light Grey	#f3f3f3
+*/
+
+body	{ font-family: Verdana; font-size: 9pt; width: 320px; padding: 0px; margin: 0px }
+th		{ background-color: #cccccc; }
+
+#mob-header				{ background-color: #700052; color: white; margin: 0; font-size: 14px; font-weight: bold;
+							vertical-align: bottom }
+#mob-header img			{ margin: 2px }
+#mob-body				{ margin: 2px }
+.myr-section-title		{ margin: 8px 8px 8px 8px; font-size: small; color: #700052; }
+.myr-section-text		{ margin-bottom: 8px; }
+.myr-section-inner		{ margin: 2px 8px 8px 8px; padding-bottom: 16px; border-bottom: 3px solid #d7c0d0; }
+tr.myr-list-row-deleted, tr.myr-list-row-deleted * { background: #ece9d8; color:#d9d9d9; }
+tr[url]:hover			{ background-color: #d7c0d0; }
+.myr-button				{ background-color: #d7c0d0; }
+.myr-button > a			{ color: #700052; }
+
+/* Rullion */
+.nextMsg-Rullion .nm-box			{ border: 1px #700052 solid; background-color:#ece9d8; color:#000000; }
+.nextMsg-Rullion .nm-arrow-tm		{ border-top-color: #700052; }
+.nextMsg-Rullion .nm-arrow-bm		{ border-bottom-color: #700052; }
+.nextMsg-Rullion .nm-arrow-lm		{ border-left-color: #700052; }
+.nextMsg-Rullion .nm-arrow-rm		{ border-right-color: #700052; }
+.nextMsg-Rullion .nm-arrow-lt		{ border-left-color: #700052; }
+.nextMsg-Rullion .nm-arrow-rt		{ border-right-color: #700052; }

@@ -6,15 +6,20 @@
     margin-top: 5px;
 }
 
-a.social {
-    width:32px;
-    height: 25px;
+a.social > i.fa {
+    font-size:28px;
     padding:0px;
     border: none;
 }
 
+a.social:active {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
 a.social:hover {
     background-color: inherit;
+    color: #5b1257 !important;
     background-position: 0px;
 }
 

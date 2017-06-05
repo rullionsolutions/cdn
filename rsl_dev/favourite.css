@@ -1,6 +1,7 @@
 .favourite_icon {
     position: absolute;
-    top: 35px;
+    font-size:18px;
+    top: 45px;
     right: 20px;
 }
 
