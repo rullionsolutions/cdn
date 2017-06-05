@@ -336,6 +336,15 @@ x.sidebar.handlePanelAction = function () {
     $(document).on("click", "[data-click=panel-collapse]", function (e) {
         e.preventDefault();
         $(this).closest(".panel").find(".panel-body").slideToggle();
+        $(this).children("i.fa").each(function () {
+            if ($(this).hasClass("fa-plus")) {
+                $(this).removeClass("fa-plus");
+                $(this).addClass("fa-minus");
+            } else {
+                $(this).addClass("fa-plus");
+                $(this).removeClass("fa-minus");
+            }
+        });
     });
 
     // reload
