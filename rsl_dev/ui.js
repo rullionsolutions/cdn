@@ -487,6 +487,9 @@ x.ui.redirect = function (url, reload_opts) {
     } else {
         this.close();
         window.location.href = url;
+        if (reload_opts.force_load) {
+            window.location.reload();
+        }
     }
 };
 
@@ -536,6 +539,7 @@ x.ui.performAjaxSuccess = function (data_back, xml_http_request, reload_opts) {
     if (xml_http_request.status === 204) {      // "our" redirection...
         this.prompt_message = null;
         this.active = true;     // allow subsequent performAjax
+        reload_opts.force_load = true;
         this.redirect(xml_http_request.getResponseHeader("Location"), reload_opts);
     } else {
         this.setLoadContent(data_back);
