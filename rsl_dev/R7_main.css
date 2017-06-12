@@ -243,14 +243,21 @@ span.css_attr_item > label	{ display: inline; margin-left: 5px; margin-right: 15
     padding-left: 10px;
   }
 }
-.css_page_links > * {
+#footer > div { display: inline-block; }
+#footer > div > a { margin: 0 10px 10px 0; }
+#css_page_links > ul { margin: 0; padding: 0; }
+#css_page_links > ul.css_footer_expanded_layout > li {
     font-size: 12px;
     display: inline-block;
     margin: 0 10px 10px 0;
 }
 
-div.css_page_buttons            {}
-div.css_page_buttons > button   { margin: 0 10px 10px 0; }
+#css_page_buttons > ul { margin: 0; padding: 0; }
+#css_page_buttons > ul > li {
+    font-size: 12px;
+    display: inline-block;
+    margin: 0 10px 10px 0;
+}
 .btn-scroll-to-top {
   right: 12px;
   bottom: 12px;

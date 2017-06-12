@@ -749,8 +749,11 @@ x.ui.movePageMarkup = function () {
     that.setLinks($(this.selectors.target).find("#css_payload_page_links > *"));
     that.setTabs($(this.selectors.target).find("#css_payload_page_tabs > *"));
     that.setButtons($(this.selectors.target).find("#css_payload_page_buttons > *"));
+    that.onLoadOrResizeFooter();
     that.loadIncludeFiles($(document).find("#css_page_includes > span"));
 };
+
+x.ui.onLoadOrResizeFooter = function () {};
 
 x.ui.loadIncludeFiles = function (include_spans) {
     var that = this;
@@ -1602,10 +1605,55 @@ $(window).on("resize", function () {
 
 x.ui.main.onLoadOrResize = function () {
     var footer_height = $("#footer").height();
+    var phone_format = ($("body").width() < 768);
+    if (phone_format !== this.phone_format) {
+        this.phone_format = phone_format;
+        x.ui.main.onLoadOrResizeFooter();
+    }
     $("#behind-footer-spacer").height(footer_height);
     $("table.css_list").each(function () {
         $(this).data("table_controller").onresize();
     });
+};
+
+
+x.ui.main.onLoadOrResizeFooter = function () {
+    this.hideIfNoElements($(this.selectors.links));
+    this.hideIfNoElements($(this.selectors.buttons));
+    this.setPhoneFormat($(this.selectors.links), this.phone_format);
+        // this.setPhoneFormat($(this.selectors.buttons), phone_format);
+};
+
+
+x.ui.main.hideIfNoElements = function (selector) {
+    var items = selector.children("li").length;
+    if (items === 0) {
+        selector.parent().addClass("css_hide");
+    } else {
+        selector.parent().removeClass("css_hide");
+    }
+};
+
+x.ui.main.setPhoneFormat = function (selector, phone_format) {
+    if (phone_format) {
+        selector.parent().addClass("btn-group");
+        selector.parent().children("a").removeClass("css_hide");
+        selector.addClass("dropdown-menu");
+        selector.removeClass("css_footer_expanded_layout");
+        selector.find("li > a").each(function () {
+            $(this).data("button_classes", $(this).attr("class"));
+            $(this).attr("class", "");
+        });
+    } else {
+        selector.parent().removeClass("btn-group");
+        selector.parent().children("a").addClass("css_hide");
+        selector.removeClass("dropdown-menu");
+        selector.addClass("css_footer_expanded_layout");
+        selector.find("li > a").each(function () {
+            $(this).attr("class", $(this).data("button_classes"));
+            $(this).data("button_classes", "");
+        });
+    }
 };
 
 x.ui.table.initialize = function () {
