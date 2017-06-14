@@ -283,6 +283,48 @@ x.ui.close = function () {
 
 
 // ------------------------------------------------------------------------------------- Navigation
+// Row clicks
+$(document).on("click", "[url]", function (event) {
+    var ui = x.ui.getLocal(this);
+    // Avoid redirecting if clicked an anchor or button...
+    if ($(event.target).is("a") || $(event.target).parents("a").length > 0) {
+        return;
+    }
+    if ($(event.target).is(".btn") || $(event.target).parents(".btn").length > 0) {
+        return;
+    }
+    // x.ui.getLocal(this).redirectAttribute(this, "url");
+    ui.redirect($(this).attr("url"), ui.getReloadOptsFromElement(this));
+});
+
+// Anchor clicks
+$(document).on("click", "#css_main a[href], #css_modal a[href]", function (event) {
+    var ui = x.ui.getLocal(this);
+    // x.ui.getLocal(this).redirectAttribute(this, "href");
+    ui.redirect($(this).attr("href"), ui.getReloadOptsFromElement(this));
+    return false;
+});
+
+// Tab clicks
+$(document).on("click", "ul.css_page_tabs > li", function (event) {
+    var ui = x.ui.getLocal(this);
+    var params = {
+        page_tab: $(this).attr("id"),
+    };
+    ui.reload(params, ui.getReloadOptsFromElement(this));
+});
+
+// Button clicks, col heading clicks
+$(document).on("click", ".css_cmd", function (event) {
+    var ui = x.ui.getLocal(this);
+    var params = {
+        page_button: $(this).attr("id"),
+    };
+    if (!this.onclick) {         // imgs don't have hrefs
+        ui.reload(params, ui.getReloadOptsFromElement(this));
+    }
+});
+
 window.onhashchange = function () {
     x.ui.main.hashChange();
 };
@@ -323,22 +365,6 @@ x.ui.load = function (uri, reload_opts) {
     // }
     this.reload(params, reload_opts);
 };
-
-// Tab clicks
-$(document).on("click", "ul.css_page_tabs > li", function (event) {
-    x.ui.getLocal(this).reload({ page_tab: $(this).attr("id"), });
-});
-
-// Button clicks, col heading clicks
-$(document).on("click", ".css_cmd", function (event) {
-    if (!this.onclick) {         // imgs don't have hrefs
-        x.ui.getLocal(this).reload({
-            page_button: $(this).attr("id"),
-        }, {
-            confirm_text: $(this).data("confirm-text"),
-        });
-    }
-});
 
 x.ui.reload = function (params, reload_opts) {
     reload_opts = reload_opts || {};
@@ -414,24 +440,7 @@ x.ui.reloadCurrentPage = function (override_params, reload_opts) {
     this.performAjax(params, reload_opts);
 };
 
-// Row clicks
-$(document).on("click", "[url]", function (event) {
-    // Avoid redirecting if clicked an anchor or button...
-    if ($(event.target).is("a") || $(event.target).parents("a").length > 0) {
-        return;
-    }
-    if ($(event.target).is(".btn") || $(event.target).parents(".btn").length > 0) {
-        return;
-    }
-    x.ui.getLocal(this).redirectAttribute(this, "url");
-});
-
-// Anchor clicks
-$(document).on("click", "#css_main a[href], #css_modal a[href]", function (event) {
-    x.ui.getLocal(this).redirectAttribute(this, "href");
-    return false;
-});
-
+/*
 x.ui.redirectAttribute = function (elmt, attr_id) {
     var url = $(elmt).attr(attr_id || "href");
     var reload_opts = {};
@@ -440,6 +449,7 @@ x.ui.redirectAttribute = function (elmt, attr_id) {
     this.debug("redirectAttribute(" + elmt + ", " + attr_id + ")");
     if (url && url !== "#") {             // no-op urls
         reload_opts.refer_section_id = $(elmt).parents("div.css_section").attr("id");
+        reload_opts.confirm_text = $(elmt).data("confirm-text");
         if ($(elmt).hasClass("css_bulk")) {
             $(elmt).parents("table").eq(0).find("tr.css_mr_selected")
             .each(function () {
@@ -456,6 +466,25 @@ x.ui.redirectAttribute = function (elmt, attr_id) {
         this.redirect(url, reload_opts);
     }
 };
+*/
+
+x.ui.getReloadOptsFromElement = function (elmt) {
+    var keylist = [];
+    var reload_opts = {
+        refer_section_id: $(elmt).parents("div.css_section").attr("id"),
+        confirm_text: $(elmt).data("confirm-text"),
+        force_load: $(elmt).hasClass("css_force_load"),
+        open_new_window: ($(elmt).attr("target") === "_blank"),
+
+    };
+    $(elmt).parents("table").eq(0).find("tr.css_mr_selected")
+    .each(function () {
+        keylist.push($(this).attr("data-key"));
+    });
+    reload_opts.selected_rows = keylist.join(",");
+    return reload_opts;
+};
+
 
 x.ui.redirect = function (url, reload_opts) {
     if (!url) {
