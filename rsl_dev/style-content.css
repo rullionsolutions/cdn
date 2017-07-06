@@ -198,8 +198,8 @@ table.css_mr_selecting > tfoot > tr.css_mr_actions > td    { background-color: #
 .css_bulk_rowcount			{ min-width: 100px; font-size: x-small; text-align: center; }
 /* .css_bulk, .css_bulk_select { margin-left: 5px; } */
 
-div.modal.fade.in           { top: 50px; z-index: 2000000001;}       /* Modal window disappears on narrow screens */
-div.modal-backdrop.fade.in  { z-index: 2000000000;}
+div.modal.fade.in           { top: 50px; z-index: 5001;}       /* Modal window disappears on narrow screens */
+div.modal-backdrop.fade.in  { z-index: 5000;}
 .modal-footer				{ line-height: 35px; }				/* space between rows of buttons if they wrap around */
 
 
