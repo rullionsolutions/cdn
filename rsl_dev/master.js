@@ -1201,7 +1201,7 @@ $(document).on("loadSuccess", function (e, target, params, opts, data_back) {
 
     $("a#css_page_print").attr("href", "jsp/main.jsp?mode=renderPrint&" + y.simpleURL());
     $("a#css_page_excel").attr("href", "jsp/main.jsp?mode=renderExcel&" + y.simpleURL());
-    $("a#css_page_pdf"  ).attr("href", "jsp/main.jsp?mode=renderPDF&"   + y.simpleURL());
+    $("a#css_page_pdf"  ).attr("href", "file/curr_page.pdf?" + y.simpleURL()); // servlet instead of jsp
     $(".css_accnt").text((y.session.chameleon ? "[" + y.session.chameleon + "] " : "" ) + y.session.user_name);
     if (y.session.help_article) {
         link = $("a#css_page_helpw").attr("href");
